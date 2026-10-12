@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+*.so
+venv/
+.venv/
+__pycache__/
+.env
+*.pyc
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Data (user downloads from Kaggle)
+data/raw/
+data/processed/
+data/external/
+
+# Cached weather & forecast JSON
+*_cache.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+*.env
+
+# Large model binaries not needed for inference
+# (keep: model.json, feature_schema.json, model_metadata.json, preprocessor.pkl)
+models/*.ubj
+models/*.joblib
+# Broken model artifacts
+models/preprocessor.pkl
+models/rice_yield_predictor.joblib
+# Local model backups
+models_backup/
+models_before_training/
