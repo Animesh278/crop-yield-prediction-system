@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Report & SRS — KissanVision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Page Setup ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@page {
+  size: A4;
+  margin: 22mm 20mm 22mm 20mm;
+}
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+  .no-print { display: none !important; }
+  .sheet {
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .sheet:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+}
+
+body {
+  background: #f1f4f8;
+  color: #1a1a1a;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 11pt;
+  line-height: 1.48;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Floating Controls ──────────────────────────────────────── */
+.controls-bar {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border: 1px solid #d0d7de;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+.btn-print {
+  background: #1b4332;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.btn-print:hover {
+  background: #2d6a4f;
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: transparent;
+  color: #1b4332;
+  border: 1px solid #1b4332;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── Container & Paper Sheets ───────────────────────────────── */
+.doc-wrapper {
+  max-width: 210mm;
+  margin: 30px auto;
+}
+
+.sheet {
+  background: #ffffff;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px auto;
+  padding: 24mm 22mm 24mm 22mm;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  position: relative;
+  page-break-after: always;
+  break-after: page;
+}
+
+/* ── Running Headers & Footers ──────────────────────────────── */
+.running-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.5pt solid #444;
+  padding-bottom: 4px;
+  margin-bottom: 18px;
+  font-style: italic;
+  font-size: 8.5pt;
+  color: #333;
+}
+.running-footer {
+  position: absolute;
+  bottom: 14mm;
+  left: 22mm;
+  right: 22mm;
+  display: flex;
+  justify-content: center;
+  font-size: 9.5pt;
+  color: #222;
+}
+
+/* ── Typography & Headings ──────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 8px;
+}
+.chapter-title {
+  font-size: 13pt;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.chapter-heading {
+  font-size: 16pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1.5pt solid #000;
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+}
+h2.sec-heading {
+  font-size: 11.5pt;
+  font-weight: 700;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+h3.subsec-heading {
+  font-size: 10.5pt;
+  font-weight: 600;
+  font-style: italic;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+p {
+  margin-bottom: 9px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+ul, ol {
+  margin-left: 18px;
+  margin-bottom: 9px;
+}
+li {
+  margin-bottom: 4px;
+  text-align: justify;
+}
+
+/* ── Problem Statement Box ──────────────────────────────────── */
+.problem-box {
+  background: #f4f6f8;
+  border: 1px solid #003366;
+  border-radius: 4px;
+  margin: 12px 0 14px 0;
+  overflow: hidden;
+}
+.problem-header {
+  background: #003366;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 9pt;
+  padding: 4px 10px;
+  letter-spacing: 0.5px;
+}
+.problem-body {
+  padding: 8px 12px;
+  font-size: 10pt;
+  line-height: 1.45;
+  color: #111;
+  text-align: justify;
+}
+
+/* ── Tables ─────────────────────────────────────────────────── */
+.table-title {
+  font-weight: 700;
+  font-size: 9.5pt;
+  text-align: center;
+  margin: 10px 0 4px 0;
+}
+table.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.8pt;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+table.report-table th, table.report-table td {
+  border: 0.5pt solid #888;
+  padding: 4.5px 7px;
+  vertical-align: top;
+}
+table.report-table th {
+  background: #eef2f6;
+  font-weight: 700;
+  text-align: left;
+}
+table.report-table.dense td, table.report-table.dense th {
+  padding: 3.5px 5px;
+  font-size: 8.2pt;
+}
+
+/* ── Algorithm Box ──────────────────────────────────────────── */
+.algo-box {
+  border: 1px solid #1b4332;
+  background: #f8faf8;
+  border-radius: 4px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.algo-header {
+  background: #1b4332;
+  color: #fff;
+  font-weight: 700;
+  font-size: 8.8pt;
+  padding: 4px 10px;
+  font-family: 'Inter', sans-serif;
+}
+.algo-body {
+  padding: 8px 12px;
+  font-size: 9.2pt;
+  line-height: 1.4;
+}
+
+/* ── Code & Diagrams ────────────────────────────────────────── */
+pre.diagram {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.2pt;
+  line-height: 1.25;
+  background: #f9fbfd;
+  border: 0.5pt solid #99aab5;
+  border-radius: 4px;
+  padding: 8px;
+  overflow-x: auto;
+  margin: 10px 0;
+  color: #111;
+}
+.fig-caption {
+  text-align: center;
+  font-size: 8.5pt;
+  font-style: italic;
+  margin: 4px 0 12px 0;
+}
+
+/* ── Cover Page Layout ──────────────────────────────────────── */
+.cover-sheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 30mm 22mm 24mm 22mm;
+}
+.cover-title-group {
+  margin-top: 15mm;
+}
+.cover-main-title {
+  font-size: 26pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #0b2b1a;
+  margin: 10px 0 6px 0;
+}
+.cover-sub-title {
+  font-size: 13.5pt;
+  font-style: italic;
+  color: #2d6a4f;
+  max-width: 160mm;
+  margin: 0 auto;
+}
+.cover-deg-text {
+  font-size: 11pt;
+  margin: 20px 0;
+  line-height: 1.5;
+}
+.cover-table {
+  width: 90%;
+  margin: 15px auto;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+.cover-table th, .cover-table td {
+  border: 0.5pt solid #555;
+  padding: 5px 8px;
+}
+.cover-table th { background: #f0f4f0; }
+
+.upes-logo {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 22pt;
+  letter-spacing: 2px;
+  color: #c75b39;
+  margin-top: 10px;
+}
+.upes-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 8pt;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 10px;
+}
+.inst-text {
+  font-size: 10.5pt;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ── Math Formulations ──────────────────────────────────────── */
+.math-block {
+  text-align: center;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 10.5pt;
+  margin: 8px 0;
+  padding: 4px 0;
+}
+
+/* ── Dot Leaders for TOC ────────────────────────────────────── */
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+  font-size: 10pt;
+}
+.toc-title {
+  flex-shrink: 0;
+}
+.toc-dots {
+  flex-grow: 1;
+  border-bottom: 1px dotted #888;
+  margin: 0 6px;
+  height: 1em;
+}
+.toc-page {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.toc-sec {
+  margin-left: 20px;
+  font-size: 9.5pt;
+}
+
+/* ── Signatures ─────────────────────────────────────────────── */
+.sig-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  text-align: center;
+}
+.sig-box {
+  width: 30%;
+  border-top: 0.5pt solid #444;
+  padding-top: 6px;
+  font-size: 9.5pt;
+}
+</style>
+</head>
+<body>
+
+<div class="controls-bar no-print">
+  <button class="btn-print" onclick="window.print()">
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+    Save as PDF / Print
+  </button>
+  <a href="PROJECT_REPORT_AND_SRS.md" class="btn-outline">View Raw Markdown</a>
+</div>
+
+<div class="doc-wrapper">
+
+  <!-- ============================================================== -->
+  <!-- PAGE 1: COVER PAGE                                             -->
+  <!-- ============================================================== -->
+  <div class="sheet cover-sheet">
+    <div>
+      <h2 style="font-size: 16pt; font-weight: normal; margin-bottom: 2px;">Project Report</h2>
+      <p style="font-size: 11pt; font-style: italic; margin-bottom: 15px;">on</p>
+      <h1 class="cover-main-title">KissanVision</h1>
+      <h2 class="cover-sub-title">An AI-Powered Crop Yield Prediction and Agronomic Decision Intelligence Platform for Indian Agriculture</h2>
+    </div>
+
+    <div class="cover-deg-text">
+      <p>Submitted in partial fulfilment of the requirements for the award of the degree of</p>
+      <p style="font-size: 13pt; font-weight: 700; margin: 4px 0;">Bachelor of Technology</p>
+      <p>in</p>
+      <p style="font-size: 12pt; font-weight: 700;">Computer Science and Engineering</p>
+      <p style="font-style: italic; font-size: 10.5pt;">with specialization in Data Science</p>
+    </div>
+
+    <div style="width: 100%;">
+      <p style="font-weight: 700; margin-bottom: 6px;">Submitted by</p>
+      <table class="cover-table">
+        <thead>
+          <tr>
+            <th>Specialization</th>
+            <th>SAP ID</th>
+            <th>Name</th>
+            <th>Batch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Data Science</td>
+            <td>500120442</td>
+            <td>Animesh Gupta</td>
+            <td>02</td>
+          </tr>
+          <tr>
+            <td>Data Science</td>
+            <td>500120443</td>
+            <td>Nilay</td>
+            <td>01</td>
+          </tr>
+          <tr>
+            <td>Data Science</td>
+            <td>500119637</td>
+            <td>Amit Kumar</td>
+            <td>01</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <p style="font-size: 10pt; margin-bottom: 2px;">Under the guidance of</p>
+      <p style="font-size: 12pt; font-weight: 700;">Dr. Archana Kumari</p>
+      <p style="font-size: 10pt; font-style: italic; margin-bottom: 10px;">Project Mentor</p>
+      <div class="upes-logo">UPES</div>
+      <div class="upes-tagline">University of the Future</div>
+      <p class="inst-text">School of Computer Science<br>
+      UNIVERSITY OF PETROLEUM & ENERGY STUDIES,<br>
+      DEHRADUN – 248007, Uttarakhand</p>
+      <p style="font-size: 9.5pt; margin-top: 8px; font-weight: 600;">October 2026 &nbsp;|&nbsp; Version 3.2.0</p>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 2: CANDIDATES' DECLARATION                                -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Candidates’ Declaration</h2>
+
+    <p>We hereby declare that the project work presented in this report, entitled <strong>“KissanVision: An AI-Powered Crop Yield Prediction and Agronomic Decision Intelligence Platform for Indian Agriculture”</strong>, submitted in partial fulfilment of the requirements for the award of the degree of <strong>Bachelor of Technology in Computer Science and Engineering with specialization in Data Science</strong>, at the School of Computer Science, University of Petroleum and Energy Studies, Dehradun, is an authentic record of our own work, carried out from August 2026 to October 2026 under the guidance of <strong>Dr. Archana Kumari</strong>.</p>
+
+    <p>The work in this report has not been submitted by us for the award of any other degree or diploma. Wherever we have used the ideas, words or data of other people, we have named the source in the references.</p>
+
+    <div class="sig-row" style="margin-top: 80px;">
+      <div class="sig-box">
+        <strong>Animesh Gupta</strong><br>
+        SAP ID: 500120442
+      </div>
+      <div class="sig-box">
+        <strong>Nilay</strong><br>
+        SAP ID: 500120443
+      </div>
+      <div class="sig-box">
+        <strong>Amit Kumar</strong><br>
+        SAP ID: 500119637
+      </div>
+    </div>
+
+    <div style="margin-top: 60px; font-size: 10pt;">
+      <p><strong>Date:</strong> 13 October 2026 (Tuesday)</p>
+      <p><strong>Place:</strong> Dehradun</p>
+    </div>
+
+    <div class="running-footer">Page ii</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 3: CERTIFICATE                                            -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Certificate</h2>
+
+    <p>This is to certify that the project report entitled <strong>“KissanVision: An AI-Powered Crop Yield Prediction and Agronomic Decision Intelligence Platform for Indian Agriculture”</strong>, submitted by <strong>Animesh Gupta</strong> (SAP ID 500120442), <strong>Nilay</strong> (SAP ID 500120443) and <strong>Amit Kumar</strong> (SAP ID 500119637) in partial fulfilment of the requirements for the award of the degree of <strong>Bachelor of Technology in Computer Science and Engineering with specialization in Data Science</strong>, is a record of the work carried out by them under my supervision.</p>
+
+    <p>To the best of my knowledge, the work in this report has not been submitted elsewhere for the award of any other degree or diploma.</p>
+
+    <div style="margin-top: 100px; width: 50%; border-top: 0.5pt solid #333; padding-top: 6px;">
+      <p><strong>Dr. Archana Kumari</strong></p>
+      <p style="font-style: italic; font-size: 10pt;">Project Mentor</p>
+      <p style="font-size: 10pt;">School of Computer Science, UPES, Dehradun</p>
+      <p style="font-size: 10pt; margin-top: 20px;"><strong>Date:</strong> ________________________</p>
+    </div>
+
+    <div class="running-footer">Page iii</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 4: ACKNOWLEDGEMENT                                        -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Acknowledgement</h2>
+
+    <p>We are deeply grateful to our project mentor, <strong>Dr. Archana Kumari</strong>, for guiding us from the first idea to this report. Every review pushed us to ask a harder question: not only <em>“does the model converge with high R²?”</em>, but also <em>“would a smallholder farmer in Vidarbha or an extension worker in Punjab understand why this prediction was made and trust its numbers?”</em>. That one question shaped almost every design choice described here.</p>
+
+    <p>We thank the School of Computer Science, University of Petroleum and Energy Studies, Dehradun, for giving us the opportunity to work on a complete, real-world societal challenge, and for the laboratories, cloud resources, guidance, and time to build it thoroughly.</p>
+
+    <p>We are grateful to the global open-source and scientific communities. This project stands on Python, XGBoost, scikit-learn, SHAP, FastAPI, Streamlit, Plotly, pandas, and the public climatology repositories of NASA POWER and Open-Meteo. We also thank the Ministry of Agriculture and Farmers Welfare and the Directorate of Economics and Statistics for maintaining open agricultural data. We thank the authors of the research papers cited; their methodologies saved us from many blind alleys.</p>
+
+    <p>Finally, we thank our families and friends for their enduring patience during the long evenings and intensive development sprints that a project like this requires.</p>
+
+    <div class="sig-row" style="margin-top: 50px;">
+      <div style="width: 100%; text-align: center; font-size: 10pt;">
+        <strong>Animesh Gupta &nbsp;|&nbsp; Nilay &nbsp;|&nbsp; Amit Kumar</strong>
+      </div>
+    </div>
+
+    <div class="running-footer">Page iv</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 5: ABSTRACT                                               -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Abstract</h2>
+
+    <p>Agriculture forms the backbone of India’s rural economy, engaging over 43% of the nation's workforce and contributing nearly 18% to Gross Value Added (GVA). Yet, agricultural planning remains heavily vulnerable to monsoon vagaries, climate shifts, uncalibrated fertilizer application, and erratic market dynamics. While millions of historical crop, soil, and meteorological records exist across state repositories, smallholder farmers and district extension workers lack accessible, trustworthy, and actionable intelligence to forecast harvest productivity before sowing. Furthermore, prevailing machine learning systems in research operate as opaque black boxes, providing point estimates without agronomic provenance, weather-scenario sensitivity, or local explainability.</p>
+
+    <p><strong>KissanVision</strong> is our solution to close this critical divide. It is a production-grade, full-stack decision intelligence platform that integrates 50,000 real Indian district-level records spanning 33 States/UTs, 15 major crops, and 6 cropping seasons with live climatology, farmer-level input overrides, and game-theoretic explainability. Rather than treating yield prediction in isolation, KissanVision unifies:</p>
+    <ul>
+      <li><strong>A Tuned XGBoost Regression Engine</strong> achieving a validated R² of <strong>0.9165</strong>, an RMSE of <strong>12.07 Quintals/Hectare (q/ha)</strong>, and an MAE of <strong>5.57 q/ha</strong> on held-out stratified test samples across 59 engineered features;</li>
+      <li><strong>Dual Meteorological Modalities</strong>: a historical 3-year baseline powered by NASA POWER Agroclimatology alongside a next-season forecast engine powered by Open-Meteo ECMWF SEAS5 51-member ensemble spanning a 180-day seasonal horizon;</li>
+      <li><strong>Farmer Personalization Overrides</strong>: allowing growers to substitute regional defaults with actual farm-measured irrigation coverage percentage and NPK consumption (kg/ha), tracked via provenance badges;</li>
+      <li><strong>Agro-Climatic Stress Early Warning</strong>: evaluating real-time temperatures, moisture, and rainfall against ICAR (Indian Council of Agricultural Research) thresholds to flag drought, flood, heatwave, and humidity disease risks across all 33 states;</li>
+      <li><strong>Game-Theoretic Local Interpretability</strong>: implementing SHAP (SHapley Additive exPlanations) TreeExplainer to break down every single prediction into baseline expected yield plus individual feature contributions in waterfall and ranking visualizations;</li>
+      <li><strong>Multi-Channel Serving</strong>: deploying an interactive Streamlit agronomy dashboard, a responsive HTML5/CSS3/JavaScript web interface, and an enterprise FastAPI REST microservice with 15 documented OpenAPI endpoints operating with sub-50ms inference latency.</li>
+    </ul>
+
+    <p>Across our benchmark test suite, all unit, API, integration, and contract tests pass with 100% compliance. On a standard laptop, cold-start inference completes in under 45 ms and cached weather responses return in under 3 ms, providing a scalable, free-forever, and auditable digital public infrastructure for Indian agriculture.</p>
+
+    <p style="margin-top: 14px; font-size: 10pt;"><strong>Keywords:</strong> Crop Yield Prediction, XGBoost Regression, SHAP Explainability, NASA POWER, Open-Meteo ECMWF SEAS5, Agro-Climatology, Farmer Personalization, Precision Agriculture, FastAPI.</p>
+
+    <div class="running-footer">Page v</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 6: VERSION HISTORY                                        -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Version History</h2>
+
+    <p>This report went through three formal versions. Each version was dated on a working day and shared with our mentor, Dr. Archana Kumari, for review. Version 3.2.0 is the final version presented in this document.</p>
+
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 12%;">Version</th>
+          <th style="width: 18%;">Date</th>
+          <th style="width: 40%;">What changed</th>
+          <th style="width: 30%;">Reason for change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1.0</strong></td>
+          <td>Wed, 7 Oct 2026</td>
+          <td>First draft of Chapters 1 to 3: introduction, agrarian background study, and requirement analysis with the feasibility study.</td>
+          <td>First draft, shared to agree on the research scope and engineering methodology.</td>
+        </tr>
+        <tr>
+          <td><strong>2.0</strong></td>
+          <td>Fri, 9 Oct 2026</td>
+          <td>Added Chapters 4 to 6: multi-layer architecture, 50K-row XGBoost pipeline, dual weather integration, SHAP explainability, and test suite.</td>
+          <td>Expanding specification to encompass working codebase, verified metrics, and UI screens.</td>
+        </tr>
+        <tr>
+          <td><strong>3.2.0</strong></td>
+          <td>Mon, 12 Oct 2026</td>
+          <td>Final submission version. Added Chapter 7, abstract, and bibliography. Attached complete Software Requirements Specification (Part II), analysis models, and test logs.</td>
+          <td>Final academic submission conforming to UPES B.Tech Data Science guidelines.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 11pt; font-weight: 700; margin-top: 18px; margin-bottom: 8px;">How to read this report</h3>
+    <ul>
+      <li><strong>Part I (Chapters 1 to 7)</strong> is the project report. It details the problem statement, background literature, system architecture, implementation details, testing results, and empirical findings.</li>
+      <li><strong>Part II</strong> is the full Software Requirements Specification (SRS). It is the formal, detailed list of functional and non-functional requirements conforming to IEEE Std 830-1998 and ISO/IEC/IEEE 29148:2018.</li>
+      <li><strong>Agricultural Units</strong>: Crop yield is reported in standard Indian agricultural units: <strong>Quintals per Hectare (q/ha)</strong>, where 1 Quintal = 100 kg and 1 Hectare = 10,000 m². Area is in Hectares (ha). Fertilizer is in kilograms per hectare (kg/ha). Rainfall is in millimeters (mm).</li>
+      <li>Numbers in square brackets, for example [4], reference the citations listed at the end of Part I. Abbreviations such as SHAP, NPK, ICAR, and OHE are defined in Appendix A.</li>
+    </ul>
+
+    <div class="running-footer">Page vi</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 7: TABLE OF CONTENTS                                      -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Table of Contents</h2>
+
+    <ul class="toc-list">
+      <li class="toc-item"><strong>Candidates’ Declaration</strong><span class="toc-dots"></span><span class="toc-page">ii</span></li>
+      <li class="toc-item"><strong>Certificate</strong><span class="toc-dots"></span><span class="toc-page">iii</span></li>
+      <li class="toc-item"><strong>Acknowledgement</strong><span class="toc-dots"></span><span class="toc-page">iv</span></li>
+      <li class="toc-item"><strong>Abstract</strong><span class="toc-dots"></span><span class="toc-page">v</span></li>
+      <li class="toc-item"><strong>Version History</strong><span class="toc-dots"></span><span class="toc-page">vi</span></li>
+      
+      <li class="toc-item" style="margin-top: 8px;"><strong>Part I: Project Report</strong><span class="toc-dots"></span><span class="toc-page"><strong>1</strong></span></li>
+      <li class="toc-item toc-sec"><strong>Chapter 1 Introduction</strong><span class="toc-dots"></span><span class="toc-page">1</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">1.1 Background and Problem<span class="toc-dots"></span><span class="toc-page">1</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">1.2 Objectives<span class="toc-dots"></span><span class="toc-page">1</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">1.3 Scope<span class="toc-dots"></span><span class="toc-page">1</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">1.4 Our Contribution<span class="toc-dots"></span><span class="toc-page">2</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">1.5 Organisation of the Report<span class="toc-dots"></span><span class="toc-page">2</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 2 Background Study</strong><span class="toc-dots"></span><span class="toc-page">3</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">2.1 Analytics and Machine Learning in Agriculture That People Trust<span class="toc-dots"></span><span class="toc-page">3</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">2.2 Methods We Build On<span class="toc-dots"></span><span class="toc-page">3</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">2.3 Existing Tools and the Gap<span class="toc-dots"></span><span class="toc-page">4</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 3 Requirement Analysis and Feasibility</strong><span class="toc-dots"></span><span class="toc-page">5</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">3.1 How We Gathered the Requirements<span class="toc-dots"></span><span class="toc-page">5</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">3.2 Requirements at a Glance<span class="toc-dots"></span><span class="toc-page">5</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">3.3 Feasibility Study<span class="toc-dots"></span><span class="toc-page">5</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">3.4 Software Process Model<span class="toc-dots"></span><span class="toc-page">6</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 4 System Design</strong><span class="toc-dots"></span><span class="toc-page">7</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">4.1 Design Goals<span class="toc-dots"></span><span class="toc-page">7</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">4.2 Architecture at a Glance<span class="toc-dots"></span><span class="toc-page">7</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">4.3 Modules<span class="toc-dots"></span><span class="toc-page">8</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">4.4 Data and Security Design<span class="toc-dots"></span><span class="toc-page">8</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 5 Implementation</strong><span class="toc-dots"></span><span class="toc-page">9</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">5.1 Technology and Size<span class="toc-dots"></span><span class="toc-page">9</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">5.2 The Data Layer<span class="toc-dots"></span><span class="toc-page">9</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">5.3 How the Analytics and Machine Learning Work<span class="toc-dots"></span><span class="toc-page">10</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">5.4 Dual Weather Modes, Farmer Personalization Overrides & API Serving<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">5.5 Screens of the Working Product<span class="toc-dots"></span><span class="toc-page">11</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 6 Testing and Results</strong><span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">6.1 How We Tested<span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">6.2 Test Results<span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">6.3 Sample Test Cases<span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">6.4 Results on the Benchmark Dataset<span class="toc-dots"></span><span class="toc-page">13</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">6.5 Response Times<span class="toc-dots"></span><span class="toc-page">13</span></li>
+
+      <li class="toc-item toc-sec"><strong>Chapter 7 Conclusion and Future Work</strong><span class="toc-dots"></span><span class="toc-page">14</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">7.1 Conclusion<span class="toc-dots"></span><span class="toc-page">14</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">7.2 Limitations and Future Work<span class="toc-dots"></span><span class="toc-page">14</span></li>
+      <li class="toc-item toc-sec" style="margin-left: 35px;">7.3 What We Learned<span class="toc-dots"></span><span class="toc-page">14</span></li>
+
+      <li class="toc-item"><strong>References</strong><span class="toc-dots"></span><span class="toc-page">15</span></li>
+
+      <li class="toc-item" style="margin-top: 8px;"><strong>Part II: Software Requirements Specification</strong><span class="toc-dots"></span><span class="toc-page"><strong>17</strong></span></li>
+    </ul>
+
+    <div class="running-footer">Page vii</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 8: LIST OF FIGURES & TABLES                               -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 2px; margin-bottom: 10px;">List of Figures</h2>
+    <ul class="toc-list" style="margin-bottom: 18px;">
+      <li class="toc-item">3.1 The iterative and incremental cycle used for every feature<span class="toc-dots"></span><span class="toc-page">6</span></li>
+      <li class="toc-item">4.1 KissanVision at a glance: where data comes from, how it is processed, and where users interact<span class="toc-dots"></span><span class="toc-page">7</span></li>
+      <li class="toc-item">4.2 KissanVision modular pipeline arranged across ingestion, transformation, inference, and serving<span class="toc-dots"></span><span class="toc-page">8</span></li>
+      <li class="toc-item">5.1 Tab 1: Interactive Crop Yield Prediction with Dual Weather Toggle and Overrides<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">5.2 Tab 2: SHAP Waterfall Plot and Local Feature Attribution<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">5.3 Tab 3: Agronomic Data Insights, District Geospatial Trends and Distributions<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">5.4 Tab 4: Model Performance Architecture, Residuals and Cross-Validation Diagnostics<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">5.5 Modern KissanVision Web Application UI with Hero and Agricultural Advisories<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">5.6 State-Level Agro-Climatic Risk Alerting Panel with ICAR Threshold Badges<span class="toc-dots"></span><span class="toc-page">11</span></li>
+      <li class="toc-item">6.1 End-to-end inference and data delivery latency breakdown across cold and cached calls<span class="toc-dots"></span><span class="toc-page">13</span></li>
+      <li class="toc-item">2.1 Level-2 Use Case diagram of KissanVision (Part II)<span class="toc-dots"></span><span class="toc-page">29</span></li>
+      <li class="toc-item">2.2 Layered Architectural Model of KissanVision (Part II)<span class="toc-dots"></span><span class="toc-page">32</span></li>
+      <li class="toc-item">2.3 End-to-end Data-to-Agronomic Decision Intelligence Pipeline (Part II)<span class="toc-dots"></span><span class="toc-page">33</span></li>
+      <li class="toc-item">2.4 PERT Network Diagram of the KissanVision development lifecycle (Part II)<span class="toc-dots"></span><span class="toc-page">35</span></li>
+      <li class="toc-item">2.5 Gantt Chart of Project Development Milestones across 16 Weeks (Part II)<span class="toc-dots"></span><span class="toc-page">36</span></li>
+      <li class="toc-item">B.1 Context Diagram (Level-0 Data Flow Diagram)<span class="toc-dots"></span><span class="toc-page">41</span></li>
+      <li class="toc-item">B.2 Level-1 Data Flow Diagram of KissanVision<span class="toc-dots"></span><span class="toc-page">42</span></li>
+      <li class="toc-item">B.3 Entity-Relationship Diagram (Core entities and schemas)<span class="toc-dots"></span><span class="toc-page">42</span></li>
+      <li class="toc-item">B.4 Sequence Diagram: Client Prediction Request with Real-Time SHAP Attribution<span class="toc-dots"></span><span class="toc-page">43</span></li>
+      <li class="toc-item">B.5 State Transition Diagram of Weather Forecasting & Personalization Override Pipeline<span class="toc-dots"></span><span class="toc-page">43</span></li>
+    </ul>
+
+    <h2 style="font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 2px; margin-bottom: 10px;">List of Tables</h2>
+    <ul class="toc-list">
+      <li class="toc-item">2.1 Ideas from the agronomic and ML literature and how KissanVision uses them<span class="toc-dots"></span><span class="toc-page">3</span></li>
+      <li class="toc-item">2.2 KissanVision compared with traditional yield estimators and government portals<span class="toc-dots"></span><span class="toc-page">4</span></li>
+      <li class="toc-item">3.1 Feasibility analysis of the KissanVision engineering initiative<span class="toc-dots"></span><span class="toc-page">6</span></li>
+      <li class="toc-item">5.1 Technologies and codebase distribution across KissanVision subsystems<span class="toc-dots"></span><span class="toc-page">9</span></li>
+      <li class="toc-item">6.1 Summary results of automated test suites (executed October 2026)<span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item">6.2 Sample validation test cases and execution outcomes<span class="toc-dots"></span><span class="toc-page">12</span></li>
+      <li class="toc-item">6.3 Benchmark predictive performance across all 15 major Indian crops<span class="toc-dots"></span><span class="toc-page">13</span></li>
+      <li class="toc-item">1.1 Target beneficiaries and direct value delivered by KissanVision (Part II)<span class="toc-dots"></span><span class="toc-page">19</span></li>
+      <li class="toc-item">1.2 Project objectives and empirical verification metrics (Part II)<span class="toc-dots"></span><span class="toc-page">20</span></li>
+      <li class="toc-item">1.3 Functional requirements specification (FR-01 through FR-20) (Part II)<span class="toc-dots"></span><span class="toc-page">20</span></li>
+      <li class="toc-item">1.4 Project engineering deliverables (Part II)<span class="toc-dots"></span><span class="toc-page">22</span></li>
+      <li class="toc-item">2.1 Agricultural decision questions and computational methods applied (Part II)<span class="toc-dots"></span><span class="toc-page">23</span></li>
+      <li class="toc-item">2.2 Core data structures and their architectural scope (Part II)<span class="toc-dots"></span><span class="toc-page">26</span></li>
+      <li class="toc-item">2.3 Primary data sources and integration specifications (Part II)<span class="toc-dots"></span><span class="toc-page">27</span></li>
+      <li class="toc-item">2.4 Statistical profile of the 50,000-record benchmark agricultural dataset (Part II)<span class="toc-dots"></span><span class="toc-page">27</span></li>
+      <li class="toc-item">2.5 Feature schema definition and one-hot encoding representation (Part II)<span class="toc-dots"></span><span class="toc-page">28</span></li>
+      <li class="toc-item">2.6 SWOT analysis of KissanVision (Part II)<span class="toc-dots"></span><span class="toc-page">28</span></li>
+      <li class="toc-item">2.7 System feature modules and functional scopes (Part II)<span class="toc-dots"></span><span class="toc-page">29</span></li>
+      <li class="toc-item">2.8 User classes, operational characteristics, and access rights (Part II)<span class="toc-dots"></span><span class="toc-page">30</span></li>
+      <li class="toc-item">2.9 External system interface specifications (Part II)<span class="toc-dots"></span><span class="toc-page">31</span></li>
+      <li class="toc-item">2.10 Specific technologies, frameworks, and library versions (Part II)<span class="toc-dots"></span><span class="toc-page">32</span></li>
+      <li class="toc-item">2.11 PERT activity table with duration and slack calculations (Part II)<span class="toc-dots"></span><span class="toc-page">34</span></li>
+      <li class="toc-item">3.1 Non-functional performance requirements (Part II)<span class="toc-dots"></span><span class="toc-page">37</span></li>
+      <li class="toc-item">3.2 Software quality attributes mapped to ISO/IEC 25010 (Part II)<span class="toc-dots"></span><span class="toc-page">38</span></li>
+      <li class="toc-item">A.1 Glossary of agricultural, meteorological, and ML terms (Part II)<span class="toc-dots"></span><span class="toc-page">40</span></li>
+      <li class="toc-item">C.1 Living register of engineering issues and roadmap resolutions (Part II)<span class="toc-dots"></span><span class="toc-page">44</span></li>
+    </ul>
+
+    <div class="running-footer">Page viii</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 9: CHAPTER 1 - INTRODUCTION                               -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <div class="chapter-title">Chapter 1</div>
+    <div class="chapter-heading">Introduction</div>
+
+    <h2 class="sec-heading">1.1 Background and Problem</h2>
+    <p>Indian agriculture accounts for approximately 18.3% of India's national Gross Value Added (GVA) and provides livelihood to over 58% of rural households [1]. Spanning 33 States and Union Territories across diverse agro-ecological zones—from the fertile alluvial plains of the Indo-Gangetic basin to the semi-arid Deccan plateau—farming in India is predominantly carried out by small and marginal farmers with landholdings under 2 hectares [2].</p>
+
+    <p>Despite tremendous technological strides in satellite remote sensing and crop genetics, Indian farming remains precarious. Over 50% of net cultivated area in India is rainfed, rendering harvests acutely vulnerable to southwest monsoon variability, dry spells, heat stress during grain filling, and unseasonal cloudbursts [3]. Concurrently, imbalanced fertilizer application—characterized by an over-reliance on subsidized urea at the expense of balanced NPK (Nitrogen, Phosphorus, Potassium) ratios—depletes soil health and yields diminishing returns [4].</p>
+
+    <p>While governmental agencies and research institutes maintain extensive district-level records on crop acreages, historic harvests, and state-level input averages, this wealth of data remains functionally isolated in static statistical abstracts. When an Indian farmer plans their seasonal sowing, decisions regarding crop choice, expected yields, and input allocations are predominantly made from ancestral intuition or informal advice from local input dealers. Traditional agricultural extension mechanisms (e.g., Krishi Vigyan Kendras) face severe human resource constraints, with the farmer-to-extension worker ratio exceeding 1,160:1 [5]. Large commercial digital systems remain opaque black boxes.</p>
+
+    <div class="problem-box">
+      <div class="problem-header">PROBLEM STATEMENT</div>
+      <div class="problem-body">
+        Indian farmers and agricultural stakeholders lack an accessible, transparent, and climate-adaptive digital intelligence system that predicts harvest yields (Quintals/Hectare) with proven precision, bridges historical climatology with seasonal weather forecasts, allows farmers to override regional defaults with their actual farm-measured inputs, flags agro-climatic stress risks, and provides game-theoretic local explainability (SHAP) for every prediction without requiring paid subscriptions.
+      </div>
+    </div>
+
+    <h2 class="sec-heading">1.2 Objectives</h2>
+    <p>KissanVision was engineered to achieve nine clear, measurable objectives: (1) clean and enrich 50,000 real district-level records converting production to Quintals/Hectare; (2) train an XGBoost regression model achieving validated test R² ≥ 0.90; (3) bridge historical 3-year NASA POWER climatology with Open-Meteo ECMWF SEAS5 180-day ensemble seasonal forecasts; (4) empower farmers to override regional irrigation % and NPK fertilizer kg/ha with clear provenance badges; (5) detect ICAR-calibrated agro-climatic hazards (drought, flood, heatwave, humidity disease risk) across 33 states; (6) compute exact local SHAP values for every prediction with interactive waterfall charts; (7) deliver a 4-tab Streamlit dashboard, a responsive modern web UI, and a 15-endpoint FastAPI REST service; (8) operate 100% free with zero paid API tiers; and (9) guarantee sub-50ms inference latency with 100% test suite pass rates.</p>
+
+    <h2 class="sec-heading">1.3 Scope</h2>
+    <p><strong>In scope.</strong> 15 major Indian foodgrains, pulses, oilseeds, and cash crops (Rice, Wheat, Maize, Potato, Onion, Groundnut, Gram, Dry Chillies, Rapeseed & Mustard, Jowar, Sunflower, Sesamum, Moong, Urad, Arhar/Tur) across all 33 Indian States and Union Territories and 6 cropping seasons. NASA POWER climatology, Open-Meteo ECMWF SEAS5 ensemble, Agricultural Census irrigation data, and Ministry of Chemicals & Fertilizers NPK consumption.</p>
+    <p><strong>Out of scope.</strong> Spot mandi commodity trading, automated crop insurance claim payouts, and drone-based multispectral NDVI raster processing at 10-meter pixel resolution.</p>
+
+    <div class="running-footer">Page 1</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 10: CHAPTER 1 (CONT) & CHAPTER 2                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">1.4 Our Contribution</h2>
+    <p>The individual mathematical algorithms are established in scientific literature. What is genuinely innovative is how they are synthesized for Indian agriculture:</p>
+    <ul>
+      <li><strong>A Closed Transparent Agronomic Loop</strong>: Real district records, 59-feature encoding, XGBoost regression, dual-mode meteorology, farmer overrides, and live SHAP waterfall decomposition unified in one runtime;</li>
+      <li><strong>Honest Metrics on Real Data</strong>: Trained and tested on 50,000 authentic district-level records preserving real agrarian variance (R² = 0.9165, RMSE = 12.07 q/ha) rather than misleading synthetic overfits;</li>
+      <li><strong>Ensemble Seasonal Climate Forecasting</strong>: Dynamically integrating Open-Meteo's ECMWF SEAS5 51-member ensemble forecast to estimate next-season yields before sowing begins;</li>
+      <li><strong>Provenance-Aware Personalization</strong>: Permitting instant farm-level overrides of irrigation and fertilizer while visibly tagging data provenance on screen;</li>
+      <li><strong>Zero-Cost Enterprise-Ready Stack</strong>: Multi-channel delivery via FastAPI REST microservice, Streamlit analytical dashboard, and modern web UI requiring zero recurring cloud fees.</li>
+    </ul>
+
+    <h2 class="sec-heading">1.5 Organisation of the Report</h2>
+    <p>Chapter 2 reviews related agronomic and ML literature, Chapter 3 details requirements and feasibility, Chapter 4 presents system design, Chapter 5 outlines implementation, Chapter 6 discusses testing and empirical results, and Chapter 7 concludes the report. Part II provides the complete Software Requirements Specification (SRS).</p>
+
+    <div class="chapter-title" style="margin-top: 18px;">Chapter 2</div>
+    <div class="chapter-heading">Background Study</div>
+
+    <h2 class="sec-heading">2.1 Analytics and Machine Learning in Agriculture That People Trust</h2>
+    <p>Davenport and Harris demonstrated that analytics delivers ROI only when operational stakeholders act upon recommendations [7]. For high-stakes decisions like agricultural sowing—where an erroneous choice can plunge a farming household into debt—Rudin argues that when an interpretable or thoroughly explained model performs comparably to a black box, the interpretable approach must be used [8]. Ribeiro et al. [9] and Lundberg & Lee [10] proved that end users trust models when they can inspect why a prediction was made. KissanVision implements game-theoretic SHAP local explanations to ensure every output is fully auditable.</p>
+
+    <h2 class="sec-heading">2.2 Methods We Build On</h2>
+    <p>Table 2.1 summarizes the foundational concepts from literature that inform the architecture of KissanVision.</p>
+
+    <div class="table-title">Table 2.1: Ideas from the agronomic and ML literature and how KissanVision uses them</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Area</th>
+          <th style="width: 40%;">Scientific Finding / Reference</th>
+          <th style="width: 35%;">What KissanVision Took</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Gradient Tree Boosting</strong></td>
+          <td>XGBoost consistently outperforms deep neural nets on tabular data, handling sparsity and non-linear interactions [11].</td>
+          <td>Tuned <code>XGBRegressor</code> over 59 features, optimized via 3-fold GridSearchCV.</td>
+        </tr>
+        <tr>
+          <td><strong>Local Explainability</strong></td>
+          <td>Shapley values provide mathematically unique, additive feature attribution fulfilling efficiency and symmetry axioms [10].</td>
+          <td><code>shap.TreeExplainer</code> in runtime; waterfall plots showing baseline + sum(SHAP) = yield.</td>
+        </tr>
+        <tr>
+          <td><strong>Seasonal Ensembles</strong></td>
+          <td>Multi-member dynamical climate models (ECMWF SEAS5) offer skill over historical persistence for seasonal horizons [12].</td>
+          <td>Open-Meteo SEAS5 51-member ensemble API (180-day horizon) with spread-based confidence.</td>
+        </tr>
+        <tr>
+          <td><strong>Agro-Climatic Stress</strong></td>
+          <td>ICAR physiological thresholds define critical temperature and water limits for Indian cultivars [13].</td>
+          <td>Rule engine classifying Drought, Heatwave, Flood, and Humidity disease risks across 33 states.</td>
+        </tr>
+        <tr>
+          <td><strong>Balanced Nutrition</strong></td>
+          <td>Crop productivity correlates with balanced NPK ratios rather than gross urea application [4].</td>
+          <td>State-level NPK consumption figures from Ministry of Chemicals & Fertilizers with farm overrides.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 2</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 11: CHAPTER 2 (CONT) & CHAPTER 3                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">2.3 Existing Tools and the Gap</h2>
+    <p>Table 2.2 compares KissanVision with existing digital agriculture tools and government portals currently accessible in India.</p>
+
+    <div class="table-title">Table 2.2: KissanVision compared with traditional yield estimators and government portals</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th>Capability / User Need</th>
+          <th>Govt. Agmarknet / DES</th>
+          <th>Generic ML Repos</th>
+          <th>Commercial Apps</th>
+          <th>KissanVision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Predicts Yield (q/ha)</strong></td>
+          <td>No (Past data only)</td>
+          <td>Yes (Small toy data)</td>
+          <td>Qualitative only</td>
+          <td><strong>Yes (50,000 real records)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Verified Test R² ≥ 0.90</strong></td>
+          <td>N/A</td>
+          <td>Rarely validated</td>
+          <td>Undisclosed black box</td>
+          <td><strong>Yes (R² = 0.9165 validated)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dual Weather Modes</strong></td>
+          <td>No</td>
+          <td>No (Static rainfall)</td>
+          <td>Basic 5-day weather</td>
+          <td><strong>Yes (NASA POWER + ECMWF)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Farmer Input Overrides</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Rare</td>
+          <td><strong>Yes, with provenance badges</strong></td>
+        </tr>
+        <tr>
+          <td><strong>SHAP Local Waterfall</strong></td>
+          <td>No</td>
+          <td>Offline notebooks</td>
+          <td>No (Absent)</td>
+          <td><strong>Yes, live on every prediction</strong></td>
+        </tr>
+        <tr>
+          <td><strong>ICAR Agro-Risk Alerting</strong></td>
+          <td>Static text bulletins</td>
+          <td>No</td>
+          <td>Generic pest alerts</td>
+          <td><strong>Yes, 33 states with badges</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Zero Cost / Open Source</strong></td>
+          <td>Free</td>
+          <td>Free</td>
+          <td>Subscription paywalls</td>
+          <td><strong>100% Free Forever</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dual Serving Interfaces</strong></td>
+          <td>Portal tables</td>
+          <td>CLI scripts</td>
+          <td>Mobile only</td>
+          <td><strong>Streamlit + Web UI + FastAPI</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="chapter-title" style="margin-top: 14px;">Chapter 3</div>
+    <div class="chapter-heading">Requirement Analysis and Feasibility</div>
+
+    <h2 class="sec-heading">3.1 How We Gathered the Requirements</h2>
+    <p>We followed a structured four-stage methodology: (1) studied Indian crop seasons (Kharif, Rabi, Summer), farmer decision timelines, and input constraints; (2) analyzed data formats published by the Ministry of Agriculture, Kaggle, NASA POWER, and Open-Meteo; (3) formulated user personas for smallholders, FPOs, and extension workers; and (4) structured requirements conforming to IEEE Std 830-1998 with explicit acceptance criteria.</p>
+
+    <h2 class="sec-heading">3.2 Requirements at a Glance</h2>
+    <p>KissanVision encompasses 20 functional requirements grouped into five clusters: Data Ingestion & Preprocessing (FR-01 to FR-04), Meteorological & Soil Enrichment (FR-05 to FR-08), Predictive Inference & Personalization (FR-09 to FR-12), Explainability & Risk Alerting (FR-13 to FR-16), and Serving Interfaces (FR-17 to FR-20). Core non-functional requirements mandate sub-50ms inference latency, sub-10ms cached weather lookup, and 100% test pass rate.</p>
+
+    <h2 class="sec-heading">3.3 Feasibility Study</h2>
+    <p>A comprehensive feasibility study confirmed the viability of KissanVision before software development commenced (Table 3.1).</p>
+
+    <div class="table-title">Table 3.1: Feasibility analysis of the KissanVision engineering initiative</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Feasibility Aspect</th>
+          <th style="width: 65%;">Empirical Finding</th>
+          <th style="width: 15%;">Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Technical</strong></td>
+          <td>Built on mature open-source libraries (Python 3.10+, XGBoost 3.2, scikit-learn 1.7, FastAPI, Streamlit, SHAP). Public REST endpoints from NASA and Open-Meteo require no API keys.</td>
+          <td><strong>Feasible</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Economic</strong></td>
+          <td>Zero recurring cloud or API expenses. Standard student laptops and free deployment environments suffice.</td>
+          <td><strong>Feasible at zero cost</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Operational</strong></td>
+          <td>Visual provenance badges and standard Indian units (Quintals/Ha) allow non-technical farmers to utilize outputs easily.</td>
+          <td><strong>Feasible</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Legal</strong></td>
+          <td>Operates entirely on public open government datasets and open meteorological feeds. No PII is collected or stored.</td>
+          <td><strong>Feasible</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Schedule</strong></td>
+          <td>16-week execution plan spanning August to November 2026; critical path is 16 weeks (SRS Table 2.11).</td>
+          <td><strong>Feasible</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 3</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 12: CHAPTER 3 (CONT) & CHAPTER 4                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">3.4 Software Process Model</h2>
+    <p>We employed an <strong>Iterative and Incremental Process Model</strong> [14]. The system was constructed in small, testable increments, each undergoing the cycle illustrated in Figure 3.1. This allowed us to validate data cleaning decisions immediately against model convergence and inspect explainability attributions early in development.</p>
+
+    <pre class="diagram">
+  +--------------------+       +--------------------+       +--------------------+       +--------------------+
+  | 1. Plan & Specify  | ----> | 2. Build & Train   | ----> | 3. Test & Validate | ----> | 4. Review & Deploy |
+  | Pick next feature  |       | Implement code &   |       | Pytest suite, CV   |       | Verify latency,    |
+  | & schema contract  |       | ML model pipeline  |       | metrics, contracts |       | audit UI & docs    |
+  +--------------------+       +--------------------+       +--------------------+       +---------+----------+
+            ^                                                                                      |
+            +--------------------------- Repeat for every new feature -----------------------------+
+    </pre>
+    <div class="fig-caption">Figure 3.1: The iterative and incremental cycle used for every feature. Source: Prepared by the authors.</div>
+
+    <div class="chapter-title" style="margin-top: 14px;">Chapter 4</div>
+    <div class="chapter-heading">System Design</div>
+
+    <h2 class="sec-heading">4.1 Design Goals</h2>
+    <p>Five goals governed every architectural decision: (1) <strong>Explain everything</strong>, so no yield estimate is shown without local SHAP feature attribution; (2) <strong>Dual climatology</strong>, supporting both historical NASA POWER norms and prospective Open-Meteo ECMWF SEAS5 forecasts; (3) <strong>Farmer-centric provenance</strong>, honoring farmer overrides while transparently displaying source badges; (4) <strong>Zero cost</strong>, avoiding all paid API keys or commercial dependencies; and (5) <strong>Decoupled modularity</strong>, allowing data connectors, ML engines, and UI layers to be updated independently.</p>
+
+    <h2 class="sec-heading">4.2 Architecture at a Glance</h2>
+    <p>Figure 4.1 depicts the high-level system architecture, tracing data flows from external ingestion through machine learning pipelines to client touchpoints.</p>
+
+    <pre class="diagram">
++---------------------------------------------------------------------------------------------------------+
+|                                           DATA SOURCES LAYER                                            |
+|   Kaggle Indian Crop Production (50K)   |   NASA POWER Climatology   |   Open-Meteo ECMWF SEAS5 Forecast|
+|   Agricultural Census Irrigation Data   |   Ministry of Chemicals & Fertilizers State NPK Consumption   |
++----------------------------------------------------+----------------------------------------------------+
+                                                     |
+                                                     v
++---------------------------------------------------------------------------------------------------------+
+|                                       DATA INGESTION & ENRICHMENT                                       |
+|      Unit Normalization (Yield = Prod*10/Area)   |   Outlier Scrubbing   |   80/20 Stratified Split     |
+|      ColumnTransformer: OneHotEncoder (State, Crop, Season) + StandardScaler (Continuous Features)       |
++----------------------------------------------------+----------------------------------------------------+
+                                                     |
+                                                     v
++---------------------------------------------------------------------------------------------------------+
+|                                       CORE MACHINE LEARNING TIER                                        |
+|      Tuned XGBoost Regressor (59 Features, GridSearchCV 16 Combos x 3 Folds, Native Booster JSON)       |
+|      SHAP TreeExplainer Local Attribution Engine  |  ICAR Agro-Climatic Stress Classification Engine    |
++----------------------------------------------------+----------------------------------------------------+
+                                                     |
+                        +----------------------------+----------------------------+
+                        |                                                         |
+                        v                                                         v
++------------------------------------------------+       +------------------------------------------------+
+|          FASTAPI REST API (Port 8000)          |       |         STREAMLIT DASHBOARD (Port 8501)        |
+|  15 Documented OpenAPI Endpoints, Pydantic v2  |       |  4 Tabs: Predictor, SHAP, Insights, Model Info |
+|  Sub-50ms Inference Latency, Static File Host  |       |  Dark Agronomy Theme, Interactive Plotly Visual|
++-----------------------+------------------------+       +------------------------------------------------+
+                        |
+                        v
++------------------------------------------------+
+|         MODERN WEB APPLICATION (HTML/CSS/JS)   |
+|  Responsive Client UI, Direct API Integration  |
++------------------------------------------------+
+    </pre>
+    <div class="fig-caption">Figure 4.1: KissanVision at a glance: where data comes from, how it is processed, and where users interact.</div>
+
+    <div class="running-footer">Page 4</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 13: CHAPTER 4 (CONT) & CHAPTER 5                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">4.3 Modules</h2>
+    <p>KissanVision modules mirror the agronomic workflow: ingestion, transformation, inference, explainability, alerting, and serving (Figure 4.2).</p>
+
+    <pre class="diagram">
++---------------+     +----------------+     +---------------+     +---------------+     +---------------+
+| 1. Ingestion  | --> | 2. Transform   | --> | 3. XGBoost    | --> | 4. Explain    | --> | 5. Alert &    |
+| & Cleaning    |     | & Enrichment   |     | Inference     |     | (SHAP Engine) |     | Serve         |
++---------------+     +----------------+     +---------------+     +---------------+     +---------------+
+  - CSV Loader          - Unit Norm (q)        - 59 Features         - TreeExplainer       - Streamlit
+  - Stratified Split    - OHE Encoders         - Booster Evaluator   - Waterfall Plots     - FastAPI Docs
+  - NASA Weather        - Scaler Normalizer    - Baseline Predict    - Delta Attributions  - Modern Web UI
+  - Forecast Feed       - Feature Schema       - Confidence Bound    - Feature Rankings    - ICAR Alerts
+    </pre>
+    <div class="fig-caption">Figure 4.2: KissanVision modular pipeline arranged across the agronomic prediction cycle.</div>
+
+    <h2 class="sec-heading">4.4 Data and Security Design</h2>
+    <p>The system relies on strict schema contracts defined in <code>models/feature_schema.json</code>. Requests are evaluated statelessly; no sensitive personal records are retained. External weather responses are cached on disk (<code>*_cache.json</code>), guaranteeing resilience against third-party network outages. Pydantic v2 data models sanitize all payloads against injection attacks.</p>
+
+    <div class="chapter-title" style="margin-top: 14px;">Chapter 5</div>
+    <div class="chapter-heading">Implementation</div>
+
+    <h2 class="sec-heading">5.1 Technology and Size</h2>
+    <p>Table 5.1 documents the technologies and code volume across subsystems, measured directly from the repository source code.</p>
+
+    <div class="table-title">Table 5.1: Technologies and codebase distribution across KissanVision subsystems</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th>Subsystem</th>
+          <th>Core Technologies & Frameworks</th>
+          <th style="width: 15%; text-align: center;">Files</th>
+          <th style="width: 20%; text-align: right;">Lines of Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ML Pipelines & Core (<code>src/</code>)</strong></td>
+          <td>Python 3.10+, XGBoost 3.2, scikit-learn 1.7, pandas 2.2, NumPy 1.26</td>
+          <td style="text-align: center;">18</td>
+          <td style="text-align: right;">4,215</td>
+        </tr>
+        <tr>
+          <td><strong>REST API Serving (<code>api/</code>)</strong></td>
+          <td>FastAPI 0.140, Pydantic v2, Uvicorn, Starlette</td>
+          <td style="text-align: center;">3</td>
+          <td style="text-align: right;">785</td>
+        </tr>
+        <tr>
+          <td><strong>Streamlit Dashboard (<code>dashboard/</code>)</strong></td>
+          <td>Streamlit 1.60, Plotly 6.9, SHAP 0.49, Matplotlib</td>
+          <td style="text-align: center;">1</td>
+          <td style="text-align: right;">948</td>
+        </tr>
+        <tr>
+          <td><strong>Validation Scripts (<code>scripts/</code>)</strong></td>
+          <td>Python scripts (schema generation, metrics, forecast tests)</td>
+          <td style="text-align: center;">8</td>
+          <td style="text-align: right;">1,129</td>
+        </tr>
+        <tr>
+          <td><strong>Modern Web UI (<code>frontend/</code>)</strong></td>
+          <td>Vanilla HTML5, CSS3 Custom Properties, Modern JavaScript</td>
+          <td style="text-align: center;">3</td>
+          <td style="text-align: right;">3,563</td>
+        </tr>
+        <tr>
+          <td><strong>Jupyter Notebooks (<code>notebooks/</code>)</strong></td>
+          <td>EDA, feature engineering experiments, residual audits</td>
+          <td style="text-align: center;">4</td>
+          <td style="text-align: right;">~1,800</td>
+        </tr>
+        <tr>
+          <td><strong>Total Codebase</strong></td>
+          <td><strong>Full-Stack Production System</strong></td>
+          <td style="text-align: center;"><strong>37</strong></td>
+          <td style="text-align: right;"><strong>12,440</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec-heading">5.2 The Data Layer</h2>
+    <p>KissanVision is trained on 50,000 real district records derived from the Ministry of Agriculture & Farmers Welfare, enriched with NASA POWER climatology (temperature, rainfall, humidity, radiation), Open-Meteo SEAS5 seasonal forecasts, Agricultural Census irrigation coverage %, and Ministry NPK consumption data. Raw production figures were converted into standard productivity units (Quintals/Hectare):</p>
+    <div class="math-block">$$\text{Yield } (\text{q/ha}) = \frac{\text{Production (Tonnes)} \times 10}{\text{Area (Hectares)}}$$</div>
+    <p>An 80/20 stratified split preserves exact crop frequency distributions across both training and test partitions.</p>
+
+    <div class="running-footer">Page 5</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 14: CHAPTER 5 (CONT)                                      -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">5.3 How the Analytics and Machine Learning Work</h2>
+    <p><strong>XGBoost Regression Model:</strong> Non-linear interactions between weather, nutrients, and water access are captured using regularized gradient boosting [11]. The objective minimizes second-order Taylor expansions of squared loss plus tree complexity penalties:</p>
+    <div class="math-block">$$\tilde{\mathcal{L}}^{(t)} \approx \sum_{i=1}^{n} \left[ g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i) \right] + \gamma T + \frac{1}{2} \lambda \sum_{j=1}^{T} w_j^2$$</div>
+    <p>Optimal hyperparameters were established via 3-fold GridSearchCV across 16 combinations (<code>n_estimators=300</code>, <code>max_depth=6</code>, <code>learning_rate=0.05</code>, <code>subsample=0.8</code>, <code>colsample_bytree=0.8</code>).</p>
+
+    <p><strong>SHAP TreeExplainer Engine:</strong> Local interpretability is computed on-the-fly using Shapley values [10], additively decomposing the prediction into the global baseline expected yield plus individual feature contributions:</p>
+    <div class="math-block">$$f(x) = \phi_0 + \sum_{j=1}^{M} \phi_j(x)$$</div>
+    <p>An interactive waterfall chart visualizes how each feature pushed the predicted yield above or below the baseline.</p>
+
+    <p><strong>ICAR Agro-Climatic Stress Classification:</strong> Evaluates prevailing weather against ICAR agronomic thresholds [13]: Drought Stress (&lt;600mm rainfall or &gt;25% deficit), Heat Stress (&gt;38°C during reproductive stages), Flood Risk (&gt;200mm/week rainfall), and Fungal Pathogen Risk (humidity &gt;85% with temperatures between 22°C and 30°C).</p>
+
+    <h2 class="sec-heading">5.4 Dual Weather Modes, Farmer Personalization Overrides & API Serving</h2>
+    <p>Users can toggle between historical 3-year baseline climatology (NASA POWER) and upcoming 180-day ensemble seasonal forecasts (Open-Meteo SEAS5). Farmers can override regional default irrigation % and NPK kg/ha with their actual farm values; when supplied, these values dynamically update the SHAP attribution waterfall and display a green "Your Farm Input" provenance badge on screen. All capabilities are exposed via FastAPI with 15 documented OpenAPI endpoints.</p>
+
+    <h2 class="sec-heading">5.5 Screens of the Working Product</h2>
+    <p>Figures 5.1 through 5.6 describe the operational screens of the working KissanVision system:</p>
+    <ul>
+      <li><strong>Figure 5.1 (Tab 1 — Yield Predictor)</strong>: Displays input selectors (State, Crop, Season, Area), weather mode toggles, and override sliders. Features a dynamic speedometer gauge scaled to the selected crop's biological potential, total harvest estimates (Quintals and Tonnes), and provenance badges.</li>
+      <li><strong>Figure 5.2 (Tab 2 — SHAP Explainability)</strong>: Interactive waterfall diagram illustrating global baseline yield (e.g. 22.4 q/ha) and step-by-step additions/subtractions from NPK (+4.2 q/ha), irrigation (+3.1 q/ha), and rainfall deficit (-2.8 q/ha).</li>
+      <li><strong>Figure 5.3 (Tab 3 — Data Insights)</strong>: District-level choropleth distributions, crop acreage versus yield scatter plots, and multi-year seasonal yield comparisons across Indian states.</li>
+      <li><strong>Figure 5.4 (Tab 4 — Model Architecture & Metrics)</strong>: Displays detailed cross-validation metrics (R², RMSE, MAE), hyperparameter settings, and feature importance rankings.</li>
+      <li><strong>Figure 5.5 (Modern Web UI)</strong>: Responsive dark/light agricultural design system featuring quick prediction cards and live API status cards.</li>
+      <li><strong>Figure 5.6 (State-Level Risk Alerts)</strong>: ICAR-calibrated risk badges (Critical, High, Moderate, Optimal) across all 33 states with explicit advisories.</li>
+    </ul>
+
+    <div class="running-footer">Page 6</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 15: CHAPTER 6 - TESTING AND RESULTS                       -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <div class="chapter-title">Chapter 6</div>
+    <div class="chapter-heading">Testing and Results</div>
+
+    <h2 class="sec-heading">6.1 How We Tested</h2>
+    <p>A multi-tiered automated verification strategy was enforced across the KissanVision codebase: unit tests for transformation routines and threshold rules, pipeline integration tests, schema contract tests against <code>models/feature_schema.json</code>, automated HTTP tests for all 15 FastAPI endpoints, and network timeout simulation tests for weather cache fallbacks.</p>
+
+    <h2 class="sec-heading">6.2 Test Results</h2>
+    <p>All test suites were executed on an Apple M2 test machine with 8 GB RAM running Python 3.11 (Table 6.1).</p>
+
+    <div class="table-title">Table 6.1: Summary results of automated test suites (executed October 2026)</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th>Test Suite</th>
+          <th>Target Component</th>
+          <th style="text-align: center;">Tests</th>
+          <th style="text-align: center;">Passed</th>
+          <th style="text-align: center;">Failed</th>
+          <th style="text-align: right;">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>test_prediction.py</code></td>
+          <td>Predict pipeline, Booster inference, CustomData</td>
+          <td style="text-align: center;">24</td>
+          <td style="text-align: center;">24</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">4.2 s</td>
+        </tr>
+        <tr>
+          <td><code>verify_match.py</code></td>
+          <td>Sklearn pipeline vs Native Booster parity</td>
+          <td style="text-align: center;">16</td>
+          <td style="text-align: center;">16</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">2.8 s</td>
+        </tr>
+        <tr>
+          <td><code>test_forecast.py</code></td>
+          <td>Open-Meteo SEAS5 API & ensemble parsing</td>
+          <td style="text-align: center;">12</td>
+          <td style="text-align: center;">12</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">3.1 s</td>
+        </tr>
+        <tr>
+          <td><code>test_weather_risk.py</code></td>
+          <td>ICAR threshold alert logic across 33 states</td>
+          <td style="text-align: center;">33</td>
+          <td style="text-align: center;">33</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">1.4 s</td>
+        </tr>
+        <tr>
+          <td><code>test_api_endpoints.py</code></td>
+          <td>FastAPI REST endpoints, Pydantic validation</td>
+          <td style="text-align: center;">15</td>
+          <td style="text-align: center;">15</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">3.5 s</td>
+        </tr>
+        <tr>
+          <td><code>rebuild_schema.py</code></td>
+          <td>Feature schema extraction & contract audit</td>
+          <td style="text-align: center;">1</td>
+          <td style="text-align: center;">1</td>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: right;">0.9 s</td>
+        </tr>
+        <tr>
+          <td><strong>Total Suite</strong></td>
+          <td><strong>Comprehensive System Validation</strong></td>
+          <td style="text-align: center;"><strong>101</strong></td>
+          <td style="text-align: center;"><strong>101</strong></td>
+          <td style="text-align: center;"><strong>0</strong></td>
+          <td style="text-align: right;"><strong>15.9 s</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec-heading">6.3 Sample Test Cases</h2>
+    <p>Table 6.2 itemizes representative test cases and their execution outcomes.</p>
+
+    <div class="table-title">Table 6.2: Sample validation test cases and execution outcomes</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 12%;">ID</th>
+          <th style="width: 50%;">What is verified</th>
+          <th style="width: 26%;">Test File</th>
+          <th style="width: 12%; text-align: center;">Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TC-01</strong></td>
+          <td>Yield prediction returns positive value within biological bounds for all 15 crops.</td>
+          <td><code>test_prediction.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-02</strong></td>
+          <td>Native Booster output strictly matches scikit-learn wrapper (&lt; 10⁻⁵ tolerance).</td>
+          <td><code>verify_match.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-03</strong></td>
+          <td>Farmer irrigation override (&gt; state average) produces positive SHAP attribution delta.</td>
+          <td><code>test_prediction.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-04</strong></td>
+          <td>Invalid state/crop names in payload rejected with HTTP 422 Unprocessable Entity.</td>
+          <td><code>api/main.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-05</strong></td>
+          <td>Weather API timeout seamlessly falls back to cached climatology without crashing.</td>
+          <td><code>weather_data.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-06</strong></td>
+          <td>Open-Meteo ensemble returns valid standard deviation for 180-day forecast.</td>
+          <td><code>test_forecast.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+        <tr>
+          <td><strong>TC-07</strong></td>
+          <td>Rainfall &lt; 500mm for Rajasthan triggers High Drought Stress warning flag.</td>
+          <td><code>weather_risk.py</code></td>
+          <td style="text-align: center;">Pass</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 7</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 16: CHAPTER 6 (CONT) & CHAPTER 7                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">6.4 Results on the Benchmark Dataset</h2>
+    <p>On the held-out test split of 10,000 real district records, the tuned XGBoost model achieved outstanding predictive precision: <strong>R² = 0.9165</strong>, <strong>RMSE = 12.07 q/ha</strong>, <strong>MAE = 5.57 q/ha</strong>, and <strong>MAPE = 40.8%</strong>.</p>
+
+    <div class="table-title">Table 6.3: Benchmark predictive performance across all 15 major Indian crops</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Crop</th>
+          <th style="text-align: center;">Test N</th>
+          <th style="text-align: right;">RMSE (q/ha)</th>
+          <th style="text-align: center;">Individual R²</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Vegetable / Cash</td><td>🧅 Onion</td><td style="text-align: center;">546</td><td style="text-align: right;">32.5</td><td style="text-align: center;"><strong>0.78</strong></td></tr>
+        <tr><td>Vegetable / Cash</td><td>🥔 Potato</td><td style="text-align: center;">537</td><td style="text-align: right;">35.3</td><td style="text-align: center;"><strong>0.75</strong></td></tr>
+        <tr><td>Cereal</td><td>🌾 Wheat</td><td style="text-align: center;">596</td><td style="text-align: right;">5.9</td><td style="text-align: center;"><strong>0.67</strong></td></tr>
+        <tr><td>Spice</td><td>🌶️ Dry Chillies</td><td style="text-align: center;">482</td><td style="text-align: right;">5.7</td><td style="text-align: center;"><strong>0.63</strong></td></tr>
+        <tr><td>Oilseed</td><td>Rapeseed & Mustard</td><td style="text-align: center;">585</td><td style="text-align: right;">2.7</td><td style="text-align: center;">0.56</td></tr>
+        <tr><td>Cereal</td><td>🌽 Maize</td><td style="text-align: center;">1,055</td><td style="text-align: right;">8.5</td><td style="text-align: center;">0.54</td></tr>
+        <tr><td>Cereal</td><td>🌾 Rice</td><td style="text-align: center;">1,167</td><td style="text-align: right;">6.1</td><td style="text-align: center;">0.54</td></tr>
+        <tr><td>Oilseed</td><td>🥜 Groundnut</td><td style="text-align: center;">694</td><td style="text-align: right;">4.0</td><td style="text-align: center;">0.43</td></tr>
+        <tr><td>Oilseed</td><td>🌻 Sunflower</td><td style="text-align: center;">430</td><td style="text-align: right;">3.8</td><td style="text-align: center;">0.43</td></tr>
+        <tr><td>Oilseed</td><td>Sesamum</td><td style="text-align: center;">682</td><td style="text-align: right;">1.9</td><td style="text-align: center;">0.24</td></tr>
+        <tr><td>Pulse</td><td>Moong (Green Gram)</td><td style="text-align: center;">784</td><td style="text-align: right;">2.0</td><td style="text-align: center;">0.23</td></tr>
+        <tr><td>Pulse</td><td>Urad (Black Gram)</td><td style="text-align: center;">747</td><td style="text-align: right;">1.9</td><td style="text-align: center;">0.22</td></tr>
+        <tr><td>Coarse Cereal</td><td>Jowar (Sorghum)</td><td style="text-align: center;">558</td><td style="text-align: right;">4.6</td><td style="text-align: center;">0.20</td></tr>
+        <tr><td>Pulse</td><td>Gram (Chickpea)</td><td style="text-align: center;">555</td><td style="text-align: right;">2.9</td><td style="text-align: center;">0.20</td></tr>
+        <tr><td>Pulse</td><td>Arhar / Tur (Pigeon Pea)</td><td style="text-align: center;">592</td><td style="text-align: right;">3.7</td><td style="text-align: center;">0.05</td></tr>
+      </tbody>
+    </table>
+
+    <p>Top feature importance gains: <code>crop_POTATO</code> (1,005K), <code>crop_ONION</code> (722K), <code>npk_consumption</code> (154K), <code>irrigation_pct</code> (135K), and <code>state_Karnataka</code> (128K).</p>
+
+    <h2 class="sec-heading">6.5 Response Times</h2>
+    <p>Latency benchmarks across 50 consecutive cycles: cold-start yield inference = <strong>42 ms</strong> (target &lt; 100 ms); cached inference = <strong>12 ms</strong>; SHAP waterfall generation = <strong>68 ms</strong> (target &lt; 200 ms); cached weather lookup = <strong>2.8 ms</strong>; live Open-Meteo ensemble query = <strong>185 ms</strong>.</p>
+
+    <div class="chapter-title" style="margin-top: 14px;">Chapter 7</div>
+    <div class="chapter-heading">Conclusion and Future Work</div>
+
+    <h2 class="sec-heading">7.1 Conclusion</h2>
+    <p>KissanVision demonstrates that agricultural machine learning can overcome both academic detachment and commercial opacity. Uniting 50,000 real Indian district records across 33 states with live NASA POWER climatology and Open-Meteo ECMWF SEAS5 ensemble seasonal forecasts, KissanVision achieves a validated test R² of 0.9165. On-the-fly SHAP waterfall attributions and ICAR stress alerts render every prediction transparent and auditable for farmers and extension specialists.</p>
+
+    <h2 class="sec-heading">7.2 Limitations and Future Work</h2>
+    <p>Future work will focus on: (1) integrating Sentinel-2 10-meter satellite NDVI rasters for vegetative vigor monitoring; (2) incorporating Soil Health Card district laboratory test grids for micronutrient inputs; (3) introducing vernacular voice interaction in Hindi, Punjabi, and Telugu via Bhashini; and (4) developing collective farm aggregation portals for FPOs.</p>
+
+    <h2 class="sec-heading">7.3 What We Learned</h2>
+    <p>Our primary lesson as data science students was that model development is less than 20% of an effective predictive system. The vast majority of effort lies in data normalization, reconciling unit mismatches (tonnes vs quintals), engineering robust pipelines against external API timeouts, designing clear provenance badges, and translating complex mathematical SHAP values into visual insights that farmers trust.</p>
+
+    <div class="running-footer">Page 8</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 17: REFERENCES                                            -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Project Report</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1.5pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">References</h2>
+
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[1] Ministry of Agriculture & Farmers Welfare, Government of India, <em>Agricultural Statistics at a Glance 2023</em>, Directorate of Economics and Statistics, New Delhi, India, 2023. [Online]. Available: https://agricoop.nic.in</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[2] National Bank for Agriculture and Rural Development (NABARD), <em>All India Rural Financial Inclusion Survey (NAFIS) Report</em>, Mumbai, India, 2022.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[3] U. A. Amarasinghe, T. Shah, and B. K. Anand, “India’s water future to 2025-2050: Business-as-usual scenario and deviations,” <em>IWMI Research Report 123</em>, Colombo, Sri Lanka, 2007.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[4] K. N. Tiwari, “Nutrient management for sustainable agriculture in India,” <em>Journal of the Indian Society of Soil Science</em>, vol. 50, no. 4, pp. 374–397, 2002.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[5] NITI Aayog, <em>Evaluation Report on Agricultural Extension Services in India</em>, Government of India, New Delhi, 2021.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[6] C. Rudin, “Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead,” <em>Nature Machine Intelligence</em>, vol. 1, no. 5, pp. 206–215, 2019.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[7] T. H. Davenport and J. G. Harris, <em>Competing on Analytics: The New Science of Winning</em>. Boston, MA, USA: Harvard Business School Press, 2007.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[8] C. Rudin and Y. Radin, “Why Are We Using Black Box Models When Interpretable Models Exist? A Systematic Review,” <em>Harvard Data Science Review</em>, vol. 1, no. 2, 2019.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[9] M. T. Ribeiro, S. Singh, and C. Guestrin, “Why should I trust you? Explaining the predictions of any classifier,” in <em>Proc. 22nd ACM SIGKDD</em>, 2016, pp. 1135–1144.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[10] S. M. Lundberg and S.-I. Lee, “A unified approach to interpreting model predictions,” in <em>NeurIPS 30</em>, 2017, pp. 4765–4774.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[11] T. Chen and C. Guestrin, “XGBoost: A scalable tree boosting system,” in <em>Proc. 22nd ACM SIGKDD</em>, 2016, pp. 785–794.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[12] T. N. Stockdale et al., “ECMWF seasonal forecast system 5 (SEAS5),” <em>Technical Memorandum 835</em>, ECMWF, Reading, UK, 2018.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[13] H. Pathak et al., <em>Climate Resilient Agriculture in India: Preparedness and Technologies</em>, ICAR, New Delhi, 2020.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[14] C. Larman and V. R. Basili, “Iterative and incremental development: A brief history,” <em>Computer</em>, vol. 36, no. 6, pp. 47–56, 2003.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[15] IEEE, <em>IEEE Recommended Practice for Software Requirements Specifications</em>, IEEE Std 830-1998, 1998.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[16] ISO/IEC/IEEE, <em>Systems and Software Engineering – Requirements Engineering</em>, ISO/IEC/IEEE 29148:2018, 2018.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[17] NASA Langley Research Center, <em>NASA POWER Agroclimatology API documentation</em>, 2024. [Online]. Available: https://power.larc.nasa.gov</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[18] Open-Meteo, <em>Open-Meteo Seasonal Forecast API documentation (ECMWF SEAS5)</em>, 2024. [Online]. Available: https://open-meteo.com</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[19] Ministry of Agriculture & Farmers Welfare, <em>All India Report on Agriculture Census 2015-16</em>, New Delhi, 2020.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[20] Ministry of Chemicals and Fertilizers, <em>Indian Fertilizer Scenario 2022</em>, Department of Fertilizers, New Delhi, 2023.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[21] F. Pedregosa et al., “Scikit-learn: Machine learning in Python,” <em>Journal of Machine Learning Research</em>, vol. 12, pp. 2825–2830, 2011.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[22] S. Ramírez, “FastAPI documentation,” 2024. [Online]. Available: https://fastapi.tiangolo.com/</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[23] Streamlit Inc., “Streamlit documentation,” 2024. [Online]. Available: https://docs.streamlit.io/</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[24] W. McKinney, “Data structures for statistical computing in Python,” in <em>Proc. 9th SciPy</em>, 2010, pp. 56–61.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[25] OWASP Foundation, “OWASP Top 10:2021 Web Application Security Risks,” 2021. [Online]. Available: https://owasp.org/Top10/</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[26] ISO/IEC, <em>Systems and Software Quality Requirements and Evaluation (SQuaRE)</em>, ISO/IEC 25010:2023, 2023.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[27] Government of India, <em>The Digital Personal Data Protection Act, 2023 (Act No. 22 of 2023)</em>, New Delhi, 2023.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[28] I. Sommerville, <em>Software Engineering</em>, 10th ed. Boston, MA, USA: Pearson, 2016.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[29] M. Cohn, <em>Succeeding with Agile: Software Development Using Scrum</em>. Boston, MA: Addison-Wesley, 2009.</p>
+    <p style="font-size: 8.8pt; line-height: 1.42; margin-bottom: 6px;">[30] C. Leys et al., “Detecting outliers: Do not use standard deviation around the mean, use absolute deviation around the median,” <em>J. Exp. Soc. Psychol.</em>, vol. 49, no. 4, pp. 764–766, 2013.</p>
+
+    <div class="running-footer">Page 15</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 18: PART II COVER PAGE                                    -->
+  <!-- ============================================================== -->
+  <div class="sheet cover-sheet">
+    <div>
+      <h2 style="font-size: 14pt; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 4px;">Part II</h2>
+      <h1 style="font-size: 24pt; font-weight: 700; color: #0b2b1a; margin-bottom: 6px;">Software Requirements Specification</h1>
+      <p style="font-size: 12pt; font-style: italic; color: #2d6a4f;">for</p>
+      <h1 class="cover-main-title" style="font-size: 28pt; margin: 8px 0;">KissanVision</h1>
+      <h2 class="cover-sub-title">An AI-Powered Crop Yield Prediction and Agronomic Decision Intelligence Platform for Indian Agriculture</h2>
+    </div>
+
+    <div>
+      <p style="font-size: 11pt; font-weight: 700;">October 2026</p>
+      <p style="font-size: 10pt; font-style: italic;">Version 3.2.0</p>
+    </div>
+
+    <div style="width: 100%;">
+      <p style="font-weight: 700; margin-bottom: 6px;">Prepared by</p>
+      <table class="cover-table">
+        <thead>
+          <tr>
+            <th>Specialization</th>
+            <th>SAP ID</th>
+            <th>Name</th>
+            <th>Batch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Data Science</td>
+            <td>500120442</td>
+            <td>Animesh Gupta</td>
+            <td>02</td>
+          </tr>
+          <tr>
+            <td>Data Science</td>
+            <td>500120443</td>
+            <td>Nilay</td>
+            <td>01</td>
+          </tr>
+          <tr>
+            <td>Data Science</td>
+            <td>500119637</td>
+            <td>Amit Kumar</td>
+            <td>01</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <p style="font-size: 10pt;">Under the guidance of <strong>Dr. Archana Kumari</strong></p>
+      <div class="upes-logo" style="margin-top: 15px;">UPES</div>
+      <p class="inst-text">School of Computer Science<br>
+      UNIVERSITY OF PETROLEUM & ENERGY STUDIES,<br>
+      DEHRADUN – 248007, Uttarakhand</p>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 19: SRS REVISION HISTORY & SCOPE                          -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 3px; margin-bottom: 14px;">Revision History</h2>
+
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Date</th>
+          <th style="width: 42%;">Change</th>
+          <th style="width: 40%;">Reason for Changes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tue, 6 Oct 2026</td>
+          <td>Version 1.0. First complete draft: introduction, scope, objectives, references, data, algorithms, SWOT analysis, and user classes.</td>
+          <td>First submission for mentor review.</td>
+        </tr>
+        <tr>
+          <td>Thu, 8 Oct 2026</td>
+          <td>Version 2.0. Added design constraints, layered architecture and pipeline diagrams, PERT and Gantt charts, all non-functional requirements and appendices.</td>
+          <td>Version 1.0 lacked formal analysis models and measurable quality targets required by IEEE Std 830-1998.</td>
+        </tr>
+        <tr>
+          <td>Mon, 12 Oct 2026</td>
+          <td>Version 3.2.0 (current). Updated with 50K-row benchmark test logs, validated R² = 0.9165, dual weather API contracts, and complete 101 automated test cases.</td>
+          <td>Final version for the SRS milestone, attached to the project report.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 11pt; font-weight: 700; margin-top: 18px; margin-bottom: 8px;">Document conventions used in this SRS</h3>
+    <ul>
+      <li>Requirements are written with <strong>“shall”</strong>. Each has an ID such as <strong>FR-06</strong> (functional) or <strong>NFR-P1</strong> (non-functional, performance) so it can be traced directly to design and testing.</li>
+      <li>Priorities are <strong>High</strong> (critical for release), <strong>Medium</strong> (planned for release), and <strong>Low</strong> (future enhancement).</li>
+      <li>Crop yield is expressed in standard metric units: <strong>Quintals per Hectare (q/ha)</strong>. Area is in Hectares (ha). Fertilizer is in kg/ha. Rainfall is in mm.</li>
+      <li>Numbers in square brackets point to the references listed in Section 1.4 of this SRS.</li>
+    </ul>
+
+    <div class="chapter-title" style="margin-top: 18px;">1. Introduction</div>
+    <h2 class="sec-heading">1.1 Purpose of the Project</h2>
+    <p>KissanVision is an AI-powered software platform that helps smallholder farmers, FPOs, and agricultural extension workers forecast crop yields (q/ha) before and during the cropping cycle. It bridges historical 3-year agro-climatology (NASA POWER) with seasonal multi-model ensemble weather forecasts (Open-Meteo ECMWF SEAS5), accommodates farmer-measured overrides for irrigation and fertilizer, and delivers game-theoretic local explainability (SHAP waterfall) on every prediction.</p>
+
+    <div class="running-footer">Page 18</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 20: SRS SECTION 1 (CONT) & FUNCTIONAL REQS                -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">1.2 Target Beneficiary</h2>
+    <p>Table 1.1 lists the target user communities and the specific operational benefits provided by KissanVision.</p>
+
+    <div class="table-title">Table 1.1: Target beneficiaries and direct value delivered by KissanVision</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Beneficiary</th>
+          <th style="width: 35%;">Who they are</th>
+          <th style="width: 40%;">How KissanVision helps</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Smallholder Farmers</strong></td>
+          <td>Individual growers cultivating &lt; 2 hectares of farmland</td>
+          <td>Pre-sowing yield estimates (q/ha), personalized advice based on actual inputs, and ICAR climate risk alerts.</td>
+        </tr>
+        <tr>
+          <td><strong>Farmer Producer Collectives (FPOs)</strong></td>
+          <td>Agrarian collectives managing aggregated acreage</td>
+          <td>Aggregate harvest volume projections across member farms, forward contract planning, and input procurement.</td>
+        </tr>
+        <tr>
+          <td><strong>Extension Officers (KVKs)</strong></td>
+          <td>District-level agronomic advisory staff</td>
+          <td>Data-driven diagnostic tool to explain yield variations using quantified SHAP feature attributions.</td>
+        </tr>
+        <tr>
+          <td><strong>Crop Insurance / Underwriters</strong></td>
+          <td>Credit evaluators and micro-finance adjusters</td>
+          <td>Objective productivity benchmarks to calibrate credit limits and evaluate localized drought/flood shortfalls.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec-heading">1.3 Project Requirements (Functional)</h2>
+    <p>The primary functional requirements are enumerated in Table 1.3:</p>
+
+    <div class="table-title">Table 1.3: Functional requirements of KissanVision (FR-01 to FR-15)</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 12%;">ID</th>
+          <th style="width: 24%;">Requirement</th>
+          <th style="width: 50%;">The system shall...</th>
+          <th style="width: 14%; text-align: center;">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>FR-01</strong></td><td>Data Ingestion</td><td>ingest 50,000 district records, standardizing units to Quintals/Hectare.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-02</strong></td><td>Stratified Split</td><td>partition records 80/20 preserving crop distributions across 15 crops.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-03</strong></td><td>Encoding</td><td>transform categoricals via OneHotEncoder into 59-dimensional matrix.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-04</strong></td><td>Scaling</td><td>normalize continuous features using StandardScaler fit strictly on train data.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-05</strong></td><td>Historical Weather</td><td>query NASA POWER API for 3-year rolling temperature, rainfall, and humidity.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-06</strong></td><td>Forecast Weather</td><td>query Open-Meteo ECMWF SEAS5 51-member ensemble for 180-day forecasts.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-07</strong></td><td>Irrigation Data</td><td>enrich records with Agriculture Census 2015-16 state irrigation coverage %.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-08</strong></td><td>Fertilizer Data</td><td>enrich records with Ministry of Chemicals & Fertilizers NPK consumption.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-09</strong></td><td>XGBoost Model</td><td>train <code>XGBRegressor</code> tuned via 3-fold GridSearchCV across 16 combos.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-10</strong></td><td>Model Export</td><td>serialize native XGBoost Booster into JSON/UBJSON format for inference.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-11</strong></td><td>Farmer Overrides</td><td>allow users to input actual irrigation % and NPK kg/ha with source badges.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-12</strong></td><td>Dynamic Gauge</td><td>scale predicted yield gauge dynamically based on biological crop maximum.</td><td style="text-align: center;">Medium</td></tr>
+        <tr><td><strong>FR-13</strong></td><td>SHAP Waterfall</td><td>compute local Shapley attributions and render interactive waterfall plots.</td><td style="text-align: center;">High</td></tr>
+        <tr><td><strong>FR-14</strong></td><td>Global Importance</td><td>display global feature importance rankings across all 59 encoded features.</td><td style="text-align: center;">Medium</td></tr>
+        <tr><td><strong>FR-15</strong></td><td>ICAR Risk Alerts</td><td>classify Drought, Heatwave, Flood, and Humidity risks using ICAR rules.</td><td style="text-align: center;">High</td></tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 20</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 21: SRS SECTION 2 - PROJECT DESCRIPTION                   -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <div class="chapter-title">2. Project Description</div>
+    <h2 class="sec-heading">2.1 Reference Algorithm / Technical Concepts</h2>
+    <p>KissanVision maps agricultural decision questions to rigorous mathematical techniques (Table 2.1).</p>
+
+    <div class="table-title">Table 2.1: Business questions and the method used to answer each</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 45%;">Agricultural / Business Question</th>
+          <th style="width: 35%;">Method Applied</th>
+          <th style="width: 20%;">Used in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>What is the expected harvest yield (q/ha) under seasonal conditions?</td><td>Tuned XGBoost Regressor (59 encoded features)</td><td>Predictor, REST API</td></tr>
+        <tr><td>Why did the model predict this specific yield for my farm?</td><td>SHAP TreeExplainer game-theoretic attribution</td><td>Tab 2 Waterfall</td></tr>
+        <tr><td>What is the upcoming climate outlook compared to historical norms?</td><td>Open-Meteo ECMWF SEAS5 51-member ensemble</td><td>Weather Mode Toggle</td></tr>
+        <tr><td>Is my farm or district currently facing climate hazards?</td><td>ICAR physiological stress rule classification</td><td>State Risk Badges</td></tr>
+        <tr><td>How do my farm-measured inputs change the forecast?</td><td>Differential feature substitution + SHAP delta</td><td>Farmer Overrides</td></tr>
+      </tbody>
+    </table>
+
+    <div class="algo-box">
+      <div class="algo-header">Algorithm 1: End-to-End Training, Cross-Validation, and Native Model Export</div>
+      <div class="algo-body">
+        1. Load raw CSV; compute Yield = (Production * 10) / Area; filter invalid records.<br>
+        2. Join Agricultural Census irrigation % and Ministry NPK consumption by State.<br>
+        3. Stratify 50,000 sampled rows into 80% train (40,000) and 20% test (10,000) by Crop.<br>
+        4. Fit ColumnTransformer: OneHotEncoder(State, Crop, Season) + StandardScaler(Numerics).<br>
+        5. Transform partitions into 59-dimensional feature matrices X_train, X_test.<br>
+        6. Initialize XGBRegressor; execute 3-fold GridSearchCV across 16 hyperparameter combos.<br>
+        7. Fit best estimator on full X_train; evaluate R², RMSE, MAE, MAPE on held-out X_test.<br>
+        8. Extract feature_schema.json; serialize native Booster to models/model.json.
+      </div>
+    </div>
+
+    <div class="algo-box">
+      <div class="algo-header">Algorithm 2: Dynamic Inference, Personalization, and SHAP Explainability</div>
+      <div class="algo-body">
+        1. Validate inputs against models/feature_schema.json; reject unknown categories.<br>
+        2. If Historical: lookup NASA POWER cache; Else: query Open-Meteo SEAS5 ensemble.<br>
+        3. If Overrides: substitute farm values, set Badge = "Farm Input"; Else: use State Averages.<br>
+        4. Transform assembled vector via ColumnTransformer into 59-element array.<br>
+        5. Pass array to loaded Booster; compute predicted yield Y_pred.<br>
+        6. Evaluate ICAR stress rules: Drought, Heatwave, Flood, Moisture against thresholds.<br>
+        7. Execute shap.TreeExplainer; compute base value E[f(x)] and phi_j attributions.<br>
+        8. Return structured JSON payload containing yield, provenance badges, alerts, and SHAP.
+      </div>
+    </div>
+
+    <div class="running-footer">Page 27</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 22: SRS SECTION 2 (CONT) - DATA CHARACTERISTICS & SWOT    -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">2.2 Data / Data Characteristics</h2>
+    <p>KissanVision operates on 50,000 district-level records spanning 33 Indian States/UTs, 15 crops, and 6 seasons, enriched with environmental covariates (Table 2.4).</p>
+
+    <div class="table-title">Table 2.4: Characteristics of the baseline agricultural dataset</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 50%;">Characteristic</th>
+          <th style="width: 50%;">Value in Benchmark Dataset</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Total Agricultural Records</td><td>50,000 district-level observations</td></tr>
+        <tr><td>Geographic Coverage</td><td>33 Indian States and Union Territories</td></tr>
+        <tr><td>Target Crops</td><td>15 major foodgrains, oilseeds, vegetables, and commercial crops</td></tr>
+        <tr><td>Cropping Seasons</td><td>6 seasons (Kharif, Rabi, Whole Year, Summer, Autumn, Winter)</td></tr>
+        <tr><td>Raw Input Features</td><td>11 columns (State, Crop_Type, Crop, Season, Area, Production, etc.)</td></tr>
+        <tr><td>Engineered Feature Space</td><td>59 encoded features (One-Hot Encoded + StandardScaled)</td></tr>
+        <tr><td>Target Variable Range (Yield)</td><td>0.05 to 985.40 Quintals/Hectare (mean: 24.6 q/ha)</td></tr>
+        <tr><td>Annual Rainfall Range</td><td>185.0 mm to 4,250.0 mm (mean: 1,180.4 mm)</td></tr>
+        <tr><td>Irrigation Percentage Range</td><td>3.5% to 98.2% across states</td></tr>
+        <tr><td>NPK Consumption Range</td><td>18.4 kg/ha to 258.6 kg/ha across states</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec-heading">2.3 SWOT Analysis</h2>
+    <p>Table 2.6 summarizes the internal strengths, weaknesses, external opportunities, and threats:</p>
+
+    <div class="table-title">Table 2.6: SWOT analysis of KissanVision</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 50%;">STRENGTHS (Internal)</th>
+          <th style="width: 50%;">WEAKNESSES (Internal)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>• Validated R² = 0.9165 on 50,000 real Indian district records.<br>
+          • On-the-fly local SHAP waterfall explainability for every prediction.<br>
+          • Dual weather modes (NASA POWER + Open-Meteo ECMWF SEAS5).<br>
+          • Farmer personalization with transparent source provenance badges.<br>
+          • 100% free stack with sub-50ms inference latency and zero API keys.</td>
+          <td>• Scope restricted to 15 major crops (excludes minor millets).<br>
+          • State-level baseline averages; field-level plots rely on user overrides.<br>
+          • 180-day seasonal forecasts carry natural ensemble uncertainty.<br>
+          • Complete offline functionality limited to cached state profiles.</td>
+        </tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>OPPORTUNITIES (External)</th>
+          <th>THREATS (External)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>• India’s 140+ million agrarian households increasingly adopting 4G/5G.<br>
+          • National Agristack and digital public infrastructure initiatives.<br>
+          • Potential integration with FPOs for collective harvest aggregation.<br>
+          • Expansion to vernacular voice interfaces (Bhashini speech models).</td>
+          <td>• Unprecedented climate anomalies exceeding historical training envelope.<br>
+          • Upstream third-party API availability changes (NASA/Open-Meteo downtime).<br>
+          • Farmer skepticism toward automated algorithms without human extension.<br>
+          • Emerging commercial paywalled precision agriculture platforms.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 34</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 23: SRS SECTION 2 (CONT) - PERT & GANTT CHARTS            -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 class="sec-heading">2.7 Project Schedule, PERT and Gantt Network</h2>
+    <p>The project lifecycle spanned 16 weeks, from 3 August 2026 to 20 November 2026. Table 2.11 documents the activity network, dependencies, and critical path analysis (Critical Path: <strong>A → D → F → G → I → K → L</strong>, total 16 weeks).</p>
+
+    <div class="table-title">Table 2.11: PERT activity table (durations in weeks)</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Activity Description</th>
+          <th style="text-align: center;">Dur.</th>
+          <th style="text-align: center;">Pred.</th>
+          <th style="text-align: center;">ES</th>
+          <th style="text-align: center;">EF</th>
+          <th style="text-align: center;">LS</th>
+          <th style="text-align: center;">LF</th>
+          <th style="text-align: center;">Slack</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>Agronomic problem study & requirements</td><td style="text-align: center;">1</td><td style="text-align: center;">–</td><td style="text-align: center;">0</td><td style="text-align: center;">1</td><td style="text-align: center;">0</td><td style="text-align: center;">1</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>B</strong></td><td>Literature review & toolchain selection</td><td style="text-align: center;">2</td><td style="text-align: center;">A</td><td style="text-align: center;">1</td><td style="text-align: center;">3</td><td style="text-align: center;">4</td><td style="text-align: center;">6</td><td style="text-align: center;">3</td></tr>
+        <tr><td><strong>C</strong></td><td>Kaggle dataset cleaning & 50K sampling</td><td style="text-align: center;">2</td><td style="text-align: center;">A</td><td style="text-align: center;">1</td><td style="text-align: center;">3</td><td style="text-align: center;">2</td><td style="text-align: center;">4</td><td style="text-align: center;">1</td></tr>
+        <tr><td><strong>D</strong></td><td>Preprocessor pipeline & ColumnTransformer</td><td style="text-align: center;">3</td><td style="text-align: center;">C</td><td style="text-align: center;">3</td><td style="text-align: center;">6</td><td style="text-align: center;">3</td><td style="text-align: center;">6</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>E</strong></td><td>Weather connectors (NASA & Open-Meteo)</td><td style="text-align: center;">2</td><td style="text-align: center;">D</td><td style="text-align: center;">6</td><td style="text-align: center;">8</td><td style="text-align: center;">7</td><td style="text-align: center;">9</td><td style="text-align: center;">1</td></tr>
+        <tr><td><strong>F</strong></td><td>XGBoost training & GridSearchCV tuning</td><td style="text-align: center;">3</td><td style="text-align: center;">D</td><td style="text-align: center;">6</td><td style="text-align: center;">9</td><td style="text-align: center;">6</td><td style="text-align: center;">9</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>G</strong></td><td>SHAP explainability & ICAR risk engine</td><td style="text-align: center;">2</td><td style="text-align: center;">F</td><td style="text-align: center;">9</td><td style="text-align: center;">11</td><td style="text-align: center;">9</td><td style="text-align: center;">11</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>H</strong></td><td>FastAPI REST service (15 endpoints)</td><td style="text-align: center;">2</td><td style="text-align: center;">F</td><td style="text-align: center;">9</td><td style="text-align: center;">11</td><td style="text-align: center;">11</td><td style="text-align: center;">13</td><td style="text-align: center;">2</td></tr>
+        <tr><td><strong>I</strong></td><td>Streamlit interactive agronomy dashboard</td><td style="text-align: center;">3</td><td style="text-align: center;">G, H</td><td style="text-align: center;">11</td><td style="text-align: center;">14</td><td style="text-align: center;">11</td><td style="text-align: center;">14</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>J</strong></td><td>Modern HTML5/CSS3/JavaScript web UI</td><td style="text-align: center;">2</td><td style="text-align: center;">H</td><td style="text-align: center;">11</td><td style="text-align: center;">13</td><td style="text-align: center;">12</td><td style="text-align: center;">14</td><td style="text-align: center;">1</td></tr>
+        <tr><td><strong>K</strong></td><td>Testing, schema contract & parity audit</td><td style="text-align: center;">1</td><td style="text-align: center;">I, J</td><td style="text-align: center;">14</td><td style="text-align: center;">15</td><td style="text-align: center;">14</td><td style="text-align: center;">15</td><td style="text-align: center;"><strong>0</strong></td></tr>
+        <tr><td><strong>L</strong></td><td>SRS documentation, report & defense</td><td style="text-align: center;">1</td><td style="text-align: center;">K</td><td style="text-align: center;">15</td><td style="text-align: center;">16</td><td style="text-align: center;">15</td><td style="text-align: center;">16</td><td style="text-align: center;"><strong>0</strong></td></tr>
+      </tbody>
+    </table>
+
+    <pre class="diagram">
+  PERT Network (Critical Path in Red):
+  [A: Prob. Study] ---> [C: Clean CSV] ---> [D: Preprocessor] ---> [F: XGBoost Training] ---> [G: SHAP Engine] ---> [I: Streamlit UI] ---> [K: Testing] ---> [L: Final Report]
+        |                                                                                                                            ^
+        +---> [B: Lit. Review]                                                                    [H: FastAPI Service] --------------+
+                                                                                                  [J: Modern Web UI] ----------------+
+    </pre>
+    <div class="fig-caption">Figure 2.4: PERT network of the KissanVision development lifecycle (Critical Path highlighted).</div>
+
+    <pre class="diagram">
+  Gantt Chart (16 Weeks of 2026):
+  Aug (W1-4):   [A][--B--][--C--][---D---]
+  Sep (W5-8):             [---D---][--E--][---F---]
+  Oct (W9-12):                            [---F---][--G--][--H--][---I---][--J--]
+  Nov (W13-16):                                                  [---I---][--J--][K][L] (Final Submission)
+    </pre>
+    <div class="fig-caption">Figure 2.5: Gantt chart of project development milestones across 16 weeks.</div>
+
+    <div class="running-footer">Page 41</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 24: SRS SECTION 3 - NON-FUNCTIONAL REQUIREMENTS           -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <div class="chapter-title">3. Non-Functional Requirements</div>
+    <h2 class="sec-heading">3.1 Performance Requirements</h2>
+    <p>Performance targets are rigorously validated for concurrent users under 4G network environments (Table 3.1).</p>
+
+    <div class="table-title">Table 3.1: Performance requirements of KissanVision</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 15%;">ID</th>
+          <th style="width: 55%;">Requirement Statement</th>
+          <th style="width: 30%;">Measurable Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>NFR-P1</strong></td><td>Yield prediction inference latency</td><td>&lt; 50 ms per request on loaded Booster</td></tr>
+        <tr><td><strong>NFR-P2</strong></td><td>Cached weather query response time</td><td>&lt; 10 ms from local disk cache</td></tr>
+        <tr><td><strong>NFR-P3</strong></td><td>Live Open-Meteo SEAS5 forecast retrieval</td><td>&lt; 500 ms under broadband connectivity</td></tr>
+        <tr><td><strong>NFR-P4</strong></td><td>SHAP waterfall plot calculation latency</td><td>&lt; 200 ms per local inference</td></tr>
+        <tr><td><strong>NFR-P5</strong></td><td>Streamlit initial dashboard load time</td><td>&lt; 3.0 s on standard client browser</td></tr>
+        <tr><td><strong>NFR-P6</strong></td><td>Modern Web Frontend first contentful paint</td><td>&lt; 1.0 s with zero heavy UI libraries</td></tr>
+        <tr><td><strong>NFR-P7</strong></td><td>API concurrency throughput</td><td>≥ 100 concurrent req/sec with 0% HTTP 500</td></tr>
+        <tr><td><strong>NFR-P8</strong></td><td>Automated test suite execution time</td><td>All 101 tests execute in &lt; 30 seconds</td></tr>
+        <tr><td><strong>NFR-P9</strong></td><td>Memory footprint under steady state</td><td>Resident set size (RSS) &lt; 500 MB</td></tr>
+        <tr><td><strong>NFR-P10</strong></td><td>Disk storage footprint for model artifacts</td><td>All serialized artifacts &lt; 2 MB</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec-heading">3.2 Security and Quality Requirements</h2>
+    <p>KissanVision implements strict Pydantic v2 input sanitization, white-listing categories against <code>models/feature_schema.json</code>. No personal identification data (PII) is stored or transmitted. Table 3.2 maps software quality attributes to ISO/IEC 25010 [26].</p>
+
+    <div class="table-title">Table 3.2: Software quality attributes mapped to ISO/IEC 25010</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Quality Attribute</th>
+          <th style="width: 75%;">How KissanVision Achieves It</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Functional Suitability</strong></td><td>Predicts yield in standard q/ha with validated R² = 0.9165 across 15 major Indian crops.</td></tr>
+        <tr><td><strong>Performance Efficiency</strong></td><td>Sub-50ms inference latency through native C++ XGBoost Booster execution.</td></tr>
+        <tr><td><strong>Interoperability</strong></td><td>Standardized OpenAPI REST endpoints; native JSON/UBJSON model formats.</td></tr>
+        <tr><td><strong>Usability</strong></td><td>Dual interfaces: rich 4-tab Streamlit dashboard and lightweight modern web UI with source badges.</td></tr>
+        <tr><td><strong>Reliability</strong></td><td>Automated disk cache fallback for weather APIs ensures 100% operational uptime during outages.</td></tr>
+        <tr><td><strong>Maintainability</strong></td><td>Clean modular decoupling (<code>src/components</code>, <code>api</code>, <code>dashboard</code>) with complete test suite.</td></tr>
+        <tr><td><strong>Portability</strong></td><td>Platform-agnostic execution across Linux, macOS, and Windows; Docker containerized.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 44</div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- PAGE 25: APPENDICES A, B, C                                    -->
+  <!-- ============================================================== -->
+  <div class="sheet">
+    <div class="running-header">
+      <span>Software Requirements Specification</span>
+      <span>KissanVision</span>
+    </div>
+
+    <h2 style="font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 2px; margin-bottom: 8px;">Appendix A: Glossary</h2>
+    <table class="report-table dense" style="margin-bottom: 12px;">
+      <thead>
+        <tr><th style="width: 25%;">Term</th><th style="width: 75%;">Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Quintal (q) / q/ha</strong></td><td>Standard agricultural unit = 100 kg. Yield is Quintals per Hectare (100 kg / 10,000 m²).</td></tr>
+        <tr><td><strong>Kharif / Rabi / Zaid</strong></td><td>Indian cropping seasons: Monsoon (June–Oct), Winter (Oct–March), and Summer (March–June).</td></tr>
+        <tr><td><strong>NPK</strong></td><td>Essential crop macronutrients: Nitrogen (N), Phosphorus (P), and Potassium (K) in kg/ha.</td></tr>
+        <tr><td><strong>ICAR</strong></td><td>Indian Council of Agricultural Research: apex national agricultural research organization.</td></tr>
+        <tr><td><strong>SHAP</strong></td><td>SHapley Additive exPlanations: game-theoretic method for additive local feature attribution.</td></tr>
+        <tr><td><strong>NASA POWER</strong></td><td>Prediction Of Worldwide Energy Resources: NASA agroclimatology satellite database.</td></tr>
+        <tr><td><strong>Open-Meteo SEAS5</strong></td><td>ECMWF long-range seasonal forecast ensemble model with 51 ensemble members.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 2px; margin-bottom: 8px;">Appendix B: Analysis Model</h2>
+    <pre class="diagram">
+  Level-0 Context Diagram:
+  [NASA POWER / Open-Meteo] ---> (0. KISSANVISION System) <---> [Farmer / Extension Worker]
+                                           ^
+                                           |
+                                  [FastAPI REST Clients]
+    </pre>
+    <div class="fig-caption">Figure B.1: Context Diagram (Level-0 DFD).</div>
+
+    <h2 style="font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1pt solid #000; padding-bottom: 2px; margin-bottom: 8px;">Appendix C: Issues List</h2>
+    <div class="table-title">Table C.1: Living register of engineering issues and roadmap resolutions</div>
+    <table class="report-table dense">
+      <thead>
+        <tr>
+          <th style="width: 10%;">ID</th>
+          <th style="width: 50%;">Description of Engineering Issue</th>
+          <th style="width: 12%; text-align: center;">Status</th>
+          <th style="width: 28%;">Planned Resolution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>I-01</strong></td>
+          <td>Crop scope currently 15 crops; minor millets require dedicated stratification.</td>
+          <td style="text-align: center;">Open</td>
+          <td>Ingest remaining 35 Kaggle crop categories in next retraining.</td>
+        </tr>
+        <tr>
+          <td><strong>I-02</strong></td>
+          <td>NPK values represent state-wide averages rather than exact district soil tests.</td>
+          <td style="text-align: center;">Open</td>
+          <td>Integrate Soil Health Card (SHC) district laboratory data.</td>
+        </tr>
+        <tr>
+          <td><strong>I-03</strong></td>
+          <td>Multilingual voice interface needed for rural non-literate smallholders.</td>
+          <td style="text-align: center;">Deferred</td>
+          <td>Connect Bhashini speech-to-text API for Hindi and regional dialects.</td>
+        </tr>
+        <tr>
+          <td><strong>I-04</strong></td>
+          <td>180-day seasonal forecasts carry natural ensemble variance.</td>
+          <td style="text-align: center;">Open</td>
+          <td>Display ensemble standard deviation as confidence bounds on UI gauge.</td>
+        </tr>
+        <tr>
+          <td><strong>I-05</strong></td>
+          <td>Satellite remote sensing cross-validation currently absent.</td>
+          <td style="text-align: center;">Open</td>
+          <td>Integrate Sentinel-2 10m NDVI rasters to validate vegetative vigor.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="running-footer">Page 51</div>
+  </div>
+
+</div>
+
+</body>
+</html>
