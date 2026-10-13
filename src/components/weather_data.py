@@ -297,6 +297,7 @@ def get_weather_for_state(
 def enrich_dataframe_with_weather(
     df: pd.DataFrame,
     state_col: str = "state",
+    cache_only: bool = True,
 ) -> pd.DataFrame:
     """Add weather features to a DataFrame by looking up state (+ year).
 
@@ -310,6 +311,9 @@ def enrich_dataframe_with_weather(
             If crop_year column exists, uses year-specific weather.
             Otherwise, uses trailing-365-day weather.
         state_col: Name of the state column.
+        cache_only: If True, do NOT make API calls. Uncached entries are
+            filled with NaN, which will be median-imputed by the preprocessor.
+            Use cache_only=True during training to avoid slow API calls.
 
     Returns:
         Enriched DataFrame with 4 additional weather feature columns.
@@ -320,7 +324,7 @@ def enrich_dataframe_with_weather(
     has_year = "crop_year" in df.columns
 
     if has_year:
-        return _enrich_year_specific(df, state_col, cache)
+        return _enrich_year_specific(df, state_col, cache, cache_only=cache_only)
     else:
         return _enrich_trailing(df, state_col, cache)
 
@@ -329,11 +333,15 @@ def _enrich_year_specific(
     df: pd.DataFrame,
     state_col: str,
     cache: Dict[str, Dict[str, float]],
+    cache_only: bool = False,
 ) -> pd.DataFrame:
     """Year-specific weather enrichment (training mode).
 
     Pre-fetches weather for all unique (state, crop_year) combos,
     then merges features onto the DataFrame.
+
+    Args:
+        cache_only: If True, skip API calls. Uncached entries → NaN.
     """
     # Find unique (state, year) combos
     df["_state_year_key"] = (
@@ -354,39 +362,49 @@ def _enrich_year_specific(
 
     logger.info(
         "Weather enrichment: %d unique (state, year) combos, "
-        "%d already cached, %d to fetch",
-        len(unique_keys), len(unique_keys) - len(to_fetch), len(to_fetch,
-        ),
+        "%d already cached, %d to fetch (cache_only=%s)",
+        len(unique_keys), len(unique_keys) - len(to_fetch), len(to_fetch),
+        cache_only,
     )
 
-    # Batch fetch with rate limiting
-    fetched_count = 0
-    for cache_key, state_name, year in to_fetch:
-        start_date = f"{year}0101"
-        end_date = f"{year}1231"
-
-        try:
-            _fetch_and_cache(cache_key, state_name, start_date, end_date, cache)
-            fetched_count += 1
-
-            # Rate limit: sleep between API calls
-            if fetched_count % 10 == 0:
-                logger.info("  Fetched %d / %d weather combos...", fetched_count, len(to_fetch))
-                _save_cache(cache)  # checkpoint
-
-            time.sleep(_RATE_LIMIT_SLEEP)
-
-        except Exception as exc:
-            logger.error(
-                "Weather fetch failed for %s (%d): %s — filling with NaN",
-                cache_key, year, exc,
-            )
+    if cache_only and to_fetch:
+        logger.warning(
+            "cache_only=True: skipping %d API calls. "
+            "Missing weather will be median-imputed by the preprocessor.",
+            len(to_fetch),
+        )
+        # Mark uncached entries as NaN placeholders so merge works
+        for cache_key, _, _ in to_fetch:
             cache[cache_key] = {feat: np.nan for feat in WEATHER_FEATURES}
+    else:
+        # Batch fetch with rate limiting
+        fetched_count = 0
+        for cache_key, state_name, year in to_fetch:
+            start_date = f"{year}0101"
+            end_date = f"{year}1231"
 
-    # Save cache after all fetches
-    if fetched_count > 0:
-        _save_cache(cache)
-        logger.info("Weather cache updated: %d new entries saved", fetched_count)
+            try:
+                _fetch_and_cache(cache_key, state_name, start_date, end_date, cache)
+                fetched_count += 1
+
+                # Rate limit: sleep between API calls
+                if fetched_count % 10 == 0:
+                    logger.info("  Fetched %d / %d weather combos...", fetched_count, len(to_fetch))
+                    _save_cache(cache)  # checkpoint
+
+                time.sleep(_RATE_LIMIT_SLEEP)
+
+            except Exception as exc:
+                logger.error(
+                    "Weather fetch failed for %s (%d): %s — filling with NaN",
+                    cache_key, year, exc,
+                )
+                cache[cache_key] = {feat: np.nan for feat in WEATHER_FEATURES}
+
+        # Save cache after all fetches
+        if fetched_count > 0:
+            _save_cache(cache)
+            logger.info("Weather cache updated: %d new entries saved", fetched_count)
 
     # Build lookup DataFrame from cache
     cache_records = []

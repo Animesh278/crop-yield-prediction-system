@@ -35,6 +35,7 @@ data/external/
 
 # Cached weather & forecast JSON
 *_cache.json
+data/*.json
 
 # OS
 .DS_Store

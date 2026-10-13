@@ -39,7 +39,8 @@ import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
+from starlette.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 HAS_XGB: bool = False
@@ -310,7 +311,7 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="Crop Yield Prediction API",
+    title="KISSANVISION — AI-Powered Crop Yield Prediction API",
     description=(
         "AI-powered crop yield prediction with historical weather "
         "(NASA POWER) and seasonal forecasts (Open-Meteo).\n\n"
@@ -332,12 +333,29 @@ app.add_middleware(
 
 
 # ---------------------------------------------------------------------------
-#  Root redirect
+#  Frontend Static Serving & Root
 # ---------------------------------------------------------------------------
+
+FRONTEND_DIR: Path = PROJECT_ROOT / "frontend"
+
+if FRONTEND_DIR.exists():
+    css_dir = FRONTEND_DIR / "css"
+    js_dir = FRONTEND_DIR / "js"
+    assets_dir = FRONTEND_DIR / "assets"
+    if css_dir.exists():
+        app.mount("/css", StaticFiles(directory=str(css_dir)), name="css")
+    if js_dir.exists():
+        app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
 
 @app.get("/", include_in_schema=False)
 async def root():
-    """Redirect root to Swagger UI."""
+    """Serve frontend web app if available, otherwise fallback to Swagger docs."""
+    index_file = FRONTEND_DIR / "index.html"
+    if index_file.exists():
+        return FileResponse(str(index_file))
     return RedirectResponse(url="/docs")
 
 

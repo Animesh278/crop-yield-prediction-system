@@ -243,10 +243,13 @@ class DataTransformation:
             train_df = self.clean_and_prepare_df(train_df)
             test_df = self.clean_and_prepare_df(test_df)
 
-            # Enrich with NASA POWER weather data
-            logging.info("Enriching with NASA POWER weather data...")
-            train_df = self.enrich_with_weather(train_df)
-            test_df = self.enrich_with_weather(test_df)
+            # Enrich with NASA POWER weather data.
+            # cache_only=True: use cached data only; fill missing with NaN.
+            # The SimpleImputer in get_data_transformer_object() handles NaNs.
+            # This avoids making hundreds of slow API calls during training.
+            logging.info("Enriching with NASA POWER weather data (cache_only=True)...")
+            train_df = enrich_dataframe_with_weather(train_df, state_col="state", cache_only=True)
+            test_df = enrich_dataframe_with_weather(test_df, state_col="state", cache_only=True)
 
             # Enrich with irrigation coverage
             logging.info("Enriching with irrigation coverage data...")

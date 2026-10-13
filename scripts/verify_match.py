@@ -5,23 +5,34 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import joblib
+import numpy as np
+import pandas as pd
 import xgboost as xgb
 
 MODELS_DIR = Path("models")
 
 # Load preprocessor
 pp = joblib.load(str(MODELS_DIR / "preprocessor.pkl"))
-pp_features = pp.transform(
-    __import__("pandas").DataFrame(
-        columns=[
-            "crop", "state", "season", "crop_year", "area",
-            "mean_temperature", "total_precipitation",
-            "mean_relative_humidity", "mean_solar_radiation",
-            "irrigation_coverage_pct", "npk_consumption_kg_per_ha",
-        ]
-    )
-)
-n_preprocessor = pp_features.shape[1] if hasattr(pp_features, "shape") else 0
+
+# Transform a single representative row (not empty!)
+sample_row = pd.DataFrame({
+    "crop":                    ["RICE"],
+    "state":                   ["Punjab"],
+    "season":                  ["KHARIF"],
+    "crop_year":               [2014],
+    "area":                    [1.0],
+    "mean_temperature":        [24.5],
+    "total_precipitation":     [650.0],
+    "mean_relative_humidity":  [58.0],
+    "mean_solar_radiation":    [18.5],
+    "irrigation_coverage_pct": [94.0],
+    "npk_consumption_kg_per_ha": [248.0],
+})
+
+pp_features = pp.transform(sample_row)
+if hasattr(pp_features, "toarray"):
+    pp_features = pp_features.toarray()
+n_preprocessor = pp_features.shape[1]
 
 # Load model
 booster = xgb.Booster()
@@ -38,7 +49,7 @@ print(f"Model expects:        {n_model} features")
 print(f"Schema says:          {n_schema} features")
 
 if n_preprocessor == n_model == n_schema:
-    print("\nALL MATCH — ready to deploy!")
+    print("\nALL MATCH -- ready to deploy!")
 else:
-    print("\nMISMATCH DETECTED — do not deploy!")
+    print("\nMISMATCH DETECTED -- do not deploy!")
     sys.exit(1)

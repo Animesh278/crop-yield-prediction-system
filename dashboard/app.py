@@ -108,7 +108,7 @@ GAUGE_MAX_BY_CROP: Dict[str, float] = {
 # =========================================================================
 
 st.set_page_config(
-    page_title="Crop Yield Predictor",
+    page_title="KISSANVISION · Crop Yield Predictor",
     page_icon="\U0001f33e",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -668,8 +668,8 @@ npk_source = "state-avg"
 use_forecast = False
 
 with st.sidebar:
-    st.markdown("## \U0001f33e Crop Yield Predictor")
-    st.caption("50K district-level records \u00b7 Historical + Forecast")
+    st.markdown("## \U0001f33e KISSANVISION")
+    st.caption("AI-Powered Crop Yield Prediction System")
     st.divider()
 
     if not SCHEMA_OK:
@@ -891,7 +891,7 @@ with st.sidebar:
 #  SECTION 7 — Main Content
 # =========================================================================
 
-st.markdown("# \U0001f33e AI-Powered Crop Yield Prediction")
+st.markdown("# \U0001f33e KISSANVISION \u00b7 AI-Powered Crop Yield Prediction")
 st.caption(
     "District-level data (50K rows) \u00b7 15 crops \u00b7 33 states "
     "\u00b7 Historical + Forecast \u00b7 Farmer overrides"

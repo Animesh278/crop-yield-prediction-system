@@ -98,15 +98,20 @@ def main():
         df = pd.read_csv(csv_path)
         df = clean_columns(df)
 
-        # Enrich for stats
-        missing = [c for c in WEATHER_FEATURES if c not in df.columns]
-        if missing and "state" in df.columns:
-            try:
-                df = enrich_dataframe_with_weather(df, state_col="state")
-            except Exception:
-                for f in WEATHER_FEATURES:
-                    if f not in df.columns:
-                        df[f] = np.nan
+        # Handle original column naming (State_Name -> state, District_Name -> district)
+        if "state_name" in df.columns and "state" not in df.columns:
+            df.rename(columns={"state_name": "state"}, inplace=True)
+        if "district_name" in df.columns and "district" not in df.columns:
+            df.rename(columns={"district_name": "district"}, inplace=True)
+
+        # Normalize crop/state/season to uppercase
+        for col in ["crop", "state", "season"]:
+            if col in df.columns:
+                df[col] = df[col].astype(str).str.strip()
+                if col in ("crop", "season"):
+                    df[col] = df[col].str.upper()
+
+        # Enrich for stats (irrigation and fertilizer only — weather takes too long)
         if IRRIGATION_FEATURE not in df.columns:
             try:
                 df = enrich_dataframe_with_irrigation(df, state_col="state")
@@ -126,7 +131,7 @@ def main():
                 )
         if "crop_year" in df.columns:
             unique["unique_crop_year"] = sorted(
-                df["crop_year"].dropna().unique().tolist()
+                [int(x) for x in df["crop_year"].dropna().unique().tolist()]
             )
 
         stats_area = {}
@@ -140,17 +145,30 @@ def main():
                 "std": round(float(a.std()), 1),
             }
 
+    # Read actual training sample count from metadata if available
+    metadata_path = MODELS_DIR / "model_metadata.json"
+    n_training_samples = 0
+    if metadata_path.exists():
+        try:
+            with open(metadata_path) as f:
+                meta = json.load(f)
+            n_training_samples = meta.get("training_data", {}).get("n_train", 0)
+        except Exception:
+            pass
+
     schema = {
         "feature_columns": feature_columns,
         "categorical_columns": cat_cols,
         "numerical_columns": num_cols,
         "target_column": "yield",
+        "target_unit": "Quintals/Hectare",
+        "yield_calculation": "yield = (Production_tonnes / Area_hectares) * 10",
         "output_feature_names": output_names,
         "n_output_features": len(output_names),
         "crop_column": "crop" if "crop" in feature_columns else None,
         "state_column": "state" if "state" in feature_columns else None,
         "stats_area": stats_area,
-        "n_training_samples": 50000,
+        "n_training_samples": n_training_samples,
         **unique,
     }
 

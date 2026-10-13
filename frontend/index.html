@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KISSANVISION — AI-Powered Crop Yield Prediction System</title>
+  <meta name="description" content="KISSANVISION — Production-grade AI agricultural intelligence predicting Indian crop yields with weather forecasts, farmer overrides, and full explainability.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       NAVIGATION BAR
+       ========================================================================= -->
+  <header class="navbar-wrapper">
+    <nav class="navbar">
+      <a href="#home" class="brand-logo">
+        KISSANVISION <span>·</span>
+      </a>
+
+      <div class="nav-pill-menu">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#predictor" class="nav-link">🌾 Predictor Suite</a>
+        <a href="#innovations" class="nav-link">About Us</a>
+        <a href="#technology" class="nav-link">Technology</a>
+        <a href="#articles" class="nav-link">Insights</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </div>
+
+      <a href="#predictor" class="btn-contact">
+        Launch Predictor <span class="arrow-icon">↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- =========================================================================
+       HERO SECTION
+       ========================================================================= -->
+  <section id="home" class="hero-section">
+    <div class="hero-bg-container">
+      <img src="assets/images/hero-farmer.jpg" alt="Farmer watering crops in lush green field" class="hero-bg-img">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content reveal-fade-up">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>KISSANVISION · Sustaining Earth</span>
+        </div>
+
+        <h1 class="hero-title font-display">
+          Grow the Future with<br>
+          Sustainable<br>
+          Agriculture
+        </h1>
+
+        <p class="hero-subtitle">
+          We empower farmers with KISSANVISION AI intelligence, real-time ML crop yield forecasts, ICAR climate risk telemetry, and personalized farm advisory to nourish the planet.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#predictor" class="btn-primary">
+            Explore KISSANVISION <span class="arrow-icon">↗</span>
+          </a>
+          <a href="#predictor" class="btn-secondary">
+            Simulate Yield Predictions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       LOGO RIBBON / PARTNERS MARQUEE (SLIDING ANIMATION)
+       ========================================================================= -->
+  <section class="logo-ribbon-section">
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <div class="partner-logo-item"><span class="partner-icon">✦</span> FocalPoint</div>
+        <div class="partner-logo-item"><span class="partner-icon">▶</span> Screentime</div>
+        <div class="partner-logo-item"><span class="partner-icon">⬡</span> Segment</div>
+        <div class="partner-logo-item"><span class="partner-icon">☼</span> Shutterframe</div>
+        <div class="partner-logo-item"><span class="partner-icon">◓</span> Lightspeed</div>
+        <div class="partner-logo-item"><span class="partner-icon">❖</span> Mastermail</div>
+        <div class="partner-logo-item"><span class="partner-icon">🌱</span> ICAR Agrometeorology</div>
+        <div class="partner-logo-item"><span class="partner-icon">☁</span> NASA POWER</div>
+        <div class="partner-logo-item"><span class="partner-icon">⚡</span> Open-Meteo ECMWF</div>
+
+        <!-- Seamless loop duplicates -->
+        <div class="partner-logo-item"><span class="partner-icon">✦</span> FocalPoint</div>
+        <div class="partner-logo-item"><span class="partner-icon">▶</span> Screentime</div>
+        <div class="partner-logo-item"><span class="partner-icon">⬡</span> Segment</div>
+        <div class="partner-logo-item"><span class="partner-icon">☼</span> Shutterframe</div>
+        <div class="partner-logo-item"><span class="partner-icon">◓</span> Lightspeed</div>
+        <div class="partner-logo-item"><span class="partner-icon">❖</span> Mastermail</div>
+        <div class="partner-logo-item"><span class="partner-icon">🌱</span> ICAR Agrometeorology</div>
+        <div class="partner-logo-item"><span class="partner-icon">☁</span> NASA POWER</div>
+        <div class="partner-logo-item"><span class="partner-icon">⚡</span> Open-Meteo ECMWF</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 2: KISSANVISION PREDICTOR & INTELLIGENCE SUITE (4 TABS)
+       ========================================================================= -->
+  <section id="predictor" class="prediction-section">
+    <div class="container">
+      <div class="section-badge-center">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>KISSANVISION Core Intelligence</span>
+        </div>
+      </div>
+
+      <h2 class="section-title-center">🌾 AI-Powered Crop Yield Prediction</h2>
+      <p class="section-sub-center">
+        District-level data (50K rows) · 15 crops · 33 states · Historical + Forecast · Farmer overrides
+      </p>
+
+      <!-- Suite Tabs Navigation -->
+      <div class="suite-tabs-nav reveal-fade-up">
+        <button type="button" class="suite-tab-btn active" data-tab="tab-predict">Prediction</button>
+        <button type="button" class="suite-tab-btn" data-tab="tab-shap">SHAP Explainability</button>
+        <button type="button" class="suite-tab-btn" data-tab="tab-insights">Data Insights</button>
+        <button type="button" class="suite-tab-btn" data-tab="tab-info">Model Info</button>
+      </div>
+
+      <!-- TAB 1: PREDICTION -->
+      <div id="tab-predict" class="suite-tab-pane active">
+        <div class="prediction-engine-card reveal-fade-up">
+          <div class="engine-grid">
+            <!-- Left: Controls Form -->
+            <div class="controls-panel">
+              <div class="form-header-bar">
+                <div class="form-title">
+                  <span>🌱 Farm Parameters</span>
+                </div>
+                <div class="segmented-control">
+                  <button type="button" id="btnHistorical" class="segmented-btn active">🕰️ Historical</button>
+                  <button type="button" id="btnForecast" class="segmented-btn">🔮 Forecast</button>
+                </div>
+              </div>
+
+              <div class="inputs-row">
+                <div class="form-group">
+                  <label class="form-label" for="cropSelect">Crop</label>
+                  <select id="cropSelect" class="form-select"></select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="stateSelect">State</label>
+                  <select id="stateSelect" class="form-select"></select>
+                </div>
+              </div>
+
+              <div class="inputs-row">
+                <div class="form-group">
+                  <label class="form-label" for="seasonSelect">Season</label>
+                  <select id="seasonSelect" class="form-select"></select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="yearSelect">Year</label>
+                  <select id="yearSelect" class="form-select">
+                    <option value="2015" selected>2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                    <option value="2010">2010</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Area Slider -->
+              <div class="form-group range-container" style="margin-bottom: 1.25rem;">
+                <label class="form-label" for="areaSlider">
+                  <span>Area</span>
+                  <span id="areaValueDisplay" class="form-label-hint">1.0 Ha</span>
+                </label>
+                <input type="range" id="areaSlider" class="range-slider" min="0.1" max="50" step="0.5" value="1.0">
+              </div>
+
+              <!-- Farmer Overrides Toggle -->
+              <div class="overrides-toggle-box">
+                <div id="overridesToggle" class="overrides-header">
+                  <span class="overrides-title">
+                    <span>👨‍🌾 Farmer Personalization & Overrides</span>
+                  </span>
+                  <span class="toggle-chevron" style="transition: transform 0.3s ease;">▼</span>
+                </div>
+                <div id="overridesBody" class="overrides-body">
+                  <div class="form-group">
+                    <label class="form-label" for="irrigationInput">
+                      <span>Irrigation Coverage (%)</span>
+                      <span id="stateIrrHint" class="form-label-hint">Default: 40%</span>
+                    </label>
+                    <input type="number" id="irrigationInput" class="form-input" placeholder="e.g. 40" min="0" max="100">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="npkInput">
+                      <span>NPK Fertilizer (kg/ha)</span>
+                      <span id="stateNpkHint" class="form-label-hint">Default: 120 kg/ha</span>
+                    </label>
+                    <input type="number" id="npkInput" class="form-input" placeholder="e.g. 120" min="0" max="800">
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" id="btnPredict" class="btn-predict-action">
+                Generate Yield Prediction <span class="arrow-icon">↗</span>
+              </button>
+
+              <!-- Input Summary Card -->
+              <div class="input-summary-card">
+                <div class="input-summary-title">Input Summary</div>
+                <div class="input-summary-grid">
+                  <div><span>Crop</span><strong id="summaryCrop">APPLE</strong></div>
+                  <div><span>State</span><strong id="summaryState">Andaman & Nicobar</strong></div>
+                  <div><span>Season</span><strong id="summarySeason">AUTUMN</strong></div>
+                  <div><span>Year</span><strong id="summaryYear">2015</strong></div>
+                  <div><span>Area</span><strong id="summaryArea">1.0 Ha</strong></div>
+                  <div><span>Mode</span><strong id="summaryMode">Historical</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Results Panel -->
+            <div class="prediction-result-panel">
+              <!-- Big Yield Card -->
+              <div class="yield-hero-card">
+                <div class="yield-hero-top">
+                  <span id="weatherSourceBadge" class="badge-source">🕰️ Historical</span>
+                  <span style="font-size: 0.8rem; color: #a4bea8;">KISSANVISION XGBoost</span>
+                </div>
+                <div id="yieldNumber" class="yield-value-big">12.71</div>
+                <div class="yield-unit">Quintal / Hectare</div>
+                <div id="yieldSubtotal" class="yield-subtotal">Total Farm Production: 1.27 Metric Tonnes (1.0 Ha)</div>
+              </div>
+
+              <!-- Climate Context -->
+              <div class="climate-context-box">
+                <div class="climate-header">
+                  <div>
+                    <h4 id="climateTitle" class="climate-title">Climate Context — Andaman and Nicobar Islands (2015)</h4>
+                    <span id="climateCoords" class="climate-source-tag">NASA POWER (20.59°N, 78.96°E)</span>
+                  </div>
+                </div>
+                <div class="climate-metrics-grid">
+                  <div class="climate-metric-item">
+                    <div class="label">Avg Temperature</div>
+                    <div id="metricTemp" class="val">27.1 °C</div>
+                  </div>
+                  <div class="climate-metric-item">
+                    <div class="label">Annual Rainfall</div>
+                    <div id="metricRain" class="val">1172.1 mm</div>
+                  </div>
+                  <div class="climate-metric-item">
+                    <div class="label">Relative Humidity</div>
+                    <div id="metricHumidity" class="val">57%</div>
+                  </div>
+                  <div class="climate-metric-item">
+                    <div class="label">Solar Radiation</div>
+                    <div id="metricSolar" class="val">18.9 MJ/m²/day</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Agricultural Inputs -->
+              <div class="agri-inputs-box">
+                <div class="agri-inputs-grid">
+                  <div class="agri-input-item">
+                    <div class="info">
+                      <div class="label">Irrigation</div>
+                      <div id="agriIrrVal" class="val">40%</div>
+                    </div>
+                    <span id="agriIrrLevel" class="level-pill moderate">🟠 Moderate</span>
+                  </div>
+
+                  <div class="agri-input-item">
+                    <div class="info">
+                      <div class="label">NPK Fertilizer</div>
+                      <div id="agriNpkVal" class="val">120 kg/ha</div>
+                    </div>
+                    <span id="agriNpkLevel" class="level-pill moderate">🟠 Moderate</span>
+                  </div>
+                </div>
+                <div id="provenanceBadge" class="provenance-line">
+                  💧 Irrigation: 🏛️ State default · 🌱 NPK: 🏛️ State default
+                </div>
+              </div>
+
+              <!-- Weather Risk Assessment -->
+              <div class="risk-assessment-box">
+                <div class="risk-header-row">
+                  <h4 class="risk-title">Weather Risk Assessment</h4>
+                  <span id="overallRiskBadge" class="overall-risk-badge moderate">🟠 Overall: MODERATE</span>
+                </div>
+                <div id="alertCallout" class="alert-callout-card">
+                  <div class="alert-callout-icon">🟠</div>
+                  <div class="alert-callout-text">
+                    <h5 id="alertTitle">HEAT STRESS (MODERATE)</h5>
+                    <p id="alertMessage">Temperature 26.8°C vs norm 25.7°C (+4%)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: SHAP EXPLAINABILITY -->
+      <div id="tab-shap" class="suite-tab-pane">
+        <div class="shap-suite-container">
+          <!-- Formula Bar -->
+          <div class="prediction-formula-bar reveal-fade-up">
+            <div class="formula-card baseline">
+              <div class="label">Model Baseline (E[y])</div>
+              <div class="val">18.40 <span style="font-size: 1rem; color: #a4bea8;">q/ha</span></div>
+            </div>
+            <div class="formula-card shap-sum">
+              <div class="label">SHAP Contribution (Σ φ)</div>
+              <div class="val">-5.69 <span style="font-size: 1rem; color: #ffa502;">q/ha</span></div>
+            </div>
+            <div class="formula-card final-yield">
+              <div class="label">Final Prediction</div>
+              <div class="val">12.71 <span style="font-size: 1rem; color: var(--accent-lime);">q/ha</span></div>
+            </div>
+          </div>
+
+          <!-- Feature Importance Ranking -->
+          <div class="shap-ranking-card reveal-fade-up">
+            <div class="shap-card-header">
+              <h3>Top Feature Importance Ranking (|SHAP| Gain)</h3>
+              <span style="font-size: 0.85rem; color: var(--accent-lime);">XGBoost Explainer</span>
+            </div>
+            <div class="shap-breakdown-box" style="background: transparent; border: none; padding: 0;">
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">Crop Type (APPLE / Horticultural base)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 88%;"></div></div>
+                <span class="shap-bar-val">1,005K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">NPK Fertilizer Consumption (120 kg/ha)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 65%;"></div></div>
+                <span class="shap-bar-val">154K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">Irrigation Coverage (40%)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 58%;"></div></div>
+                <span class="shap-bar-val">135K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">State Baseline (Andaman and Nicobar)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 52%;"></div></div>
+                <span class="shap-bar-val">128K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">Annual Precipitation (1172 mm)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 44%;"></div></div>
+                <span class="shap-bar-val">96K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">Mean Temperature (27.1 °C)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 36%;"></div></div>
+                <span class="shap-bar-val">74K Gain</span>
+              </div>
+              <div class="shap-bar-row">
+                <span class="shap-bar-label">Solar Radiation (18.9 MJ/m²)</span>
+                <div class="shap-bar-track"><div class="shap-bar-fill" style="width: 28%;"></div></div>
+                <span class="shap-bar-val">52K Gain</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Raw SHAP Values Table -->
+          <div class="shap-waterfall-card reveal-fade-up">
+            <div class="shap-card-header">
+              <h3>Prediction Breakdown — Feature Contribution Details</h3>
+              <span style="font-size: 0.85rem; color: #a4bea8;">Top 10 Encoded Features</span>
+            </div>
+            <div class="kissan-table-container">
+              <table class="kissan-table">
+                <thead>
+                  <tr>
+                    <th>Feature Name</th>
+                    <th>Value</th>
+                    <th>SHAP Value</th>
+                    <th>|SHAP| Impact</th>
+                    <th>Direction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>crop_APPLE</strong></td>
+                    <td>1.0</td>
+                    <td style="color: #ff6b81;">-4.12 q/ha</td>
+                    <td>4.12</td>
+                    <td><span class="level-pill moderate">Decreases</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>npk_consumption</strong></td>
+                    <td>120 kg/ha</td>
+                    <td style="color: #ff6b81;">-1.35 q/ha</td>
+                    <td>1.35</td>
+                    <td><span class="level-pill moderate">Decreases</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>irrigation_pct</strong></td>
+                    <td>40%</td>
+                    <td style="color: #ff6b81;">-0.84 q/ha</td>
+                    <td>0.84</td>
+                    <td><span class="level-pill moderate">Decreases</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>total_precipitation</strong></td>
+                    <td>1172.1 mm</td>
+                    <td style="color: var(--accent-lime);">+0.42 q/ha</td>
+                    <td>0.42</td>
+                    <td><span class="level-pill optimal">Increases</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>mean_temperature</strong></td>
+                    <td>27.1 °C</td>
+                    <td style="color: var(--accent-lime);">+0.18 q/ha</td>
+                    <td>0.18</td>
+                    <td><span class="level-pill optimal">Increases</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>season_AUTUMN</strong></td>
+                    <td>1.0</td>
+                    <td style="color: var(--accent-lime);">+0.02 q/ha</td>
+                    <td>0.02</td>
+                    <td><span class="level-pill optimal">Increases</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: DATA INSIGHTS -->
+      <div id="tab-insights" class="suite-tab-pane">
+        <div class="shap-suite-container">
+          <!-- Crop Filter Chips -->
+          <div>
+            <h4 style="margin-bottom: 0.8rem; font-size: 1rem;">Filter Crops</h4>
+            <div class="filter-chips-row">
+              <span class="filter-chip active">Apple ✕</span>
+              <span class="filter-chip active">Arcanut (Processed) ✕</span>
+              <span class="filter-chip active">Arecanut ✕</span>
+              <span class="filter-chip active">Arhar/Tur ✕</span>
+              <span class="filter-chip active">Ash Gourd ✕</span>
+              <span class="filter-chip">Bajra</span>
+              <span class="filter-chip">Banana</span>
+              <span class="filter-chip">Rice</span>
+              <span class="filter-chip">Wheat</span>
+              <span class="filter-chip">Potato</span>
+              <span class="filter-chip">Onion</span>
+              <span class="filter-chip">Maize</span>
+            </div>
+          </div>
+
+          <!-- All States Weather Risk Alerts (Screenshot 1 & 2) -->
+          <div class="shap-ranking-card reveal-fade-up">
+            <div class="table-filter-bar">
+              <div>
+                <h3 style="font-size: 1.3rem;">Weather Risk Alerts — All States</h3>
+                <p style="font-size: 0.88rem; color: #9bb1a1;">ICAR-threshold-based climatic monitoring across Indian agricultural zones</p>
+              </div>
+              <input type="text" id="stateSearchInput" class="search-input" placeholder="🔍 Search state name...">
+            </div>
+
+            <!-- 4 KPI Cards -->
+            <div class="insights-kpi-grid">
+              <div class="kpi-card">
+                <div class="label" style="color: #ff6b81;">Critical/High</div>
+                <div class="val" style="color: #ff6b81;">9</div>
+              </div>
+              <div class="kpi-card">
+                <div class="label" style="color: #ffa502;">Moderate</div>
+                <div class="val" style="color: #ffa502;">10</div>
+              </div>
+              <div class="kpi-card">
+                <div class="label" style="color: #2ed573;">Low/Optimal</div>
+                <div class="val" style="color: #2ed573;">11</div>
+              </div>
+              <div class="kpi-card">
+                <div class="label" style="color: var(--accent-lime);">States</div>
+                <div class="val" style="color: #ffffff;">30</div>
+              </div>
+            </div>
+
+            <!-- Interactive Risk Table -->
+            <div class="kissan-table-container">
+              <table id="stateRiskTable" class="kissan-table">
+                <thead>
+                  <tr>
+                    <th>State</th>
+                    <th>Risk</th>
+                    <th>Temp (°C)</th>
+                    <th>Rain (mm)</th>
+                    <th>Alerts</th>
+                  </tr>
+                </thead>
+                <tbody id="stateRiskTbody">
+                  <!-- Populated dynamically by app.js with live API / fallback -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: MODEL INFO -->
+      <div id="tab-info" class="suite-tab-pane">
+        <div class="shap-suite-container">
+          <!-- Evaluation Metrics KPIs -->
+          <div class="shap-ranking-card reveal-fade-up">
+            <h3 style="margin-bottom: 0.3rem;">Model Performance & Metadata</h3>
+            <p style="color: #a4bea8; font-size: 0.9rem; margin-bottom: 1.8rem;">Evaluation Metrics (on test.csv, n=47,316)</p>
+
+            <div class="model-kpi-grid">
+              <div class="kpi-card">
+                <div class="label">RMSE</div>
+                <div class="val" style="color: #ffffff;">22.50 <span style="font-size: 1rem; color: #a4bea8;">q/ha</span></div>
+              </div>
+              <div class="kpi-card">
+                <div class="label">R² Score</div>
+                <div class="val" style="color: var(--accent-lime);">0.8779</div>
+              </div>
+              <div class="kpi-card">
+                <div class="label">MAE</div>
+                <div class="val" style="color: #ffffff;">10.77 <span style="font-size: 1rem; color: #a4bea8;">q/ha</span></div>
+              </div>
+              <div class="kpi-card">
+                <div class="label">MAPE</div>
+                <div class="val" style="color: #ffffff;">145.0%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Per-Crop Metrics Table -->
+          <div class="shap-waterfall-card reveal-fade-up">
+            <div class="shap-card-header">
+              <h3>Per-Crop Metrics</h3>
+              <span style="font-size: 0.85rem; color: var(--accent-lime);">Test Set Breakdown</span>
+            </div>
+            <div class="kissan-table-container">
+              <table class="kissan-table">
+                <thead>
+                  <tr>
+                    <th>Crop</th>
+                    <th>N</th>
+                    <th>RMSE</th>
+                    <th>MAE</th>
+                    <th>R²</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>APPLE</td><td>2</td><td>20.98</td><td>20.98</td><td>—</td></tr>
+                  <tr><td>ARCANUT (PROCESSED)</td><td>3</td><td>7.98</td><td>7.79</td><td>-19.9276</td></tr>
+                  <tr><td>ARECANUT</td><td>293</td><td>22.86</td><td>12.94</td><td>0.1243</td></tr>
+                  <tr><td>ARHAR/TUR</td><td>1407</td><td>6.19</td><td>4.94</td><td>-0.8576</td></tr>
+                  <tr><td>ASH GOURD</td><td>9</td><td>21.04</td><td>21.04</td><td>—</td></tr>
+                  <tr><td>ATCANUT (RAW)</td><td>2</td><td>47.16</td><td>47.16</td><td>-72305.2249</td></tr>
+                  <tr><td>BAJRA</td><td>1057</td><td>5.65</td><td>4.48</td><td>0.1840</td></tr>
+                  <tr><td>BANANA</td><td>558</td><td>77.83</td><td>53.13</td><td>0.6683</td></tr>
+                  <tr><td>BARLEY</td><td>835</td><td>9.48</td><td>6.93</td><td>-0.0292</td></tr>
+                  <tr><td>RICE</td><td>1167</td><td>6.12</td><td>4.25</td><td>0.5420</td></tr>
+                  <tr><td>WHEAT</td><td>596</td><td>5.88</td><td>4.10</td><td>0.6710</td></tr>
+                  <tr><td>POTATO</td><td>537</td><td>35.30</td><td>24.12</td><td>0.7510</td></tr>
+                  <tr><td>ONION</td><td>546</td><td>32.50</td><td>21.80</td><td>0.7820</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Charts Row: Predicted vs Actual & Residual Distribution -->
+          <div class="charts-row-grid reveal-fade-up">
+            <div class="chart-card">
+              <h4>Predicted vs Actual (q/ha)</h4>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartPredVsActual"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h4>Residual Distribution</h4>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartResiduals"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specs Badges -->
+          <div class="model-specs-grid reveal-fade-up">
+            <div class="spec-card">
+              <div class="label">Model Architecture</div>
+              <div class="val">XGBRegressor v3.2</div>
+            </div>
+            <div class="spec-card">
+              <div class="label">XGBoost Engine</div>
+              <div class="val">3.2.0</div>
+            </div>
+            <div class="spec-card">
+              <div class="label">SHAP Framework</div>
+              <div class="val">0.51.0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 3: INNOVATING THE FUTURE OF AGRICULTURE
+       ========================================================================= -->
+  <section id="innovations" class="innovations-section">
+    <div class="container">
+      <div class="section-header-split reveal-fade-up">
+        <h2 class="section-title-large">
+          Innovating the Future<br>of Agriculture
+        </h2>
+        <p class="section-desc-right">
+          KISSANVISION combines modern machine learning technology and sustainable methods to help farmers grow smarter, faster, and greener.
+        </p>
+      </div>
+
+      <div class="innovation-grid">
+        <!-- Photo Card 1 -->
+        <div class="photo-card reveal-fade-up">
+          <img src="assets/images/sunset-paddy.jpg" alt="Sunset over water paddy field with farmers">
+          <div class="photo-card-overlay">
+            <span class="photo-tag">Regenerative Care</span>
+            <div class="photo-caption">Sunset Paddy Irrigation</div>
+          </div>
+        </div>
+
+        <!-- Photo Card 2 -->
+        <div class="photo-card reveal-fade-up" style="transition-delay: 0.15s;">
+          <img src="assets/images/plantation-rows.jpg" alt="Aerial view of green crop plantation rows">
+          <div class="photo-card-overlay">
+            <span class="photo-tag">Contour Planting</span>
+            <div class="photo-caption">High-Yield Ridge Farming</div>
+          </div>
+        </div>
+
+        <!-- Stats Column -->
+        <div class="stats-column reveal-fade-up" style="transition-delay: 0.3s;">
+          <div class="stat-item">
+            <div class="stat-number">
+              <span class="counter-val" data-target="100" data-suffix="%">0%</span>
+            </div>
+            <div class="stat-title">Customer Satisfaction</div>
+            <p class="stat-desc">We create solutions that farmers trust and rely on across 33 states.</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-number">
+              <span class="counter-val" data-target="20" data-suffix="+">0+</span>
+            </div>
+            <div class="stat-title">Years of Experience</div>
+            <p class="stat-desc">Decades of innovation driving progress in global agriculture & agro-analytics.</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-number">
+              <span class="counter-val" data-target="92" data-suffix="%">0%</span>
+            </div>
+            <div class="stat-title">Model Validation (R²)</div>
+            <p class="stat-desc">XGBoost regression on 50,000 verified district-level agricultural records.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 4: WHERE TECHNOLOGY MEETS THE ROOTS OF NATURE (PANORAMA & VIDEO)
+       ========================================================================= -->
+  <section id="technology" class="technology-section">
+    <div class="container">
+      <div class="section-header-split reveal-fade-up">
+        <h2 class="section-title-large">
+          Where Technology Meets<br>the Roots of Nature
+        </h2>
+        <p class="section-desc-right">
+          Harnessing the power of modern tools to nurture crops, support farmers, and protect the earth we all depend on.
+        </p>
+      </div>
+
+      <!-- Panoramic Rice Terraces (Static Showcase) -->
+      <div class="panorama-card reveal-fade-up">
+        <img src="assets/images/terrace-panorama.jpg" alt="Aerial sweeping panorama of lush green rice terraces">
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 5: 4-CARD FEATURE / ARTICLES GRID
+       ========================================================================= -->
+  <section id="articles" class="articles-section">
+    <div class="container">
+      <div class="articles-grid">
+        <!-- Card 1 -->
+        <article class="article-card reveal-fade-up">
+          <div class="article-card-thumb">
+            <img src="assets/images/smart-phone-app.jpg" alt="Farmer holding smartphone with agriculture telemetry app">
+          </div>
+          <div class="article-card-body">
+            <h3 class="article-title">Sustainable Farming in the Age of Climate Change</h3>
+            <p class="article-desc">
+              Explore how farmers worldwide are adapting to rising temperatures and unpredictable weather using eco-friendly and tech-based solutions.
+            </p>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="article-card reveal-fade-up" style="transition-delay: 0.15s;">
+          <div class="article-card-thumb">
+            <img src="assets/images/tablet-farming.jpg" alt="Farmer holding digital tablet in field">
+          </div>
+          <div class="article-card-body">
+            <h3 class="article-title">How Smart Technology Is Transforming Modern Agriculture</h3>
+            <p class="article-desc">
+              Discover how AI, IoT, and automation are helping farmers monitor crops, boost yields, and reduce waste — shaping the future of agriculture.
+            </p>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="article-card reveal-fade-up">
+          <div class="article-card-thumb">
+            <img src="assets/images/regenerative-seedling.jpg" alt="Hands in gloves holding organic plant seedling with soil and roots">
+          </div>
+          <div class="article-card-body">
+            <h3 class="article-title">Building a Greener Future Through Regenerative Farming</h3>
+            <p class="article-desc">
+              Restoring soil health, preserving natural microbiomes, and optimizing organic compost cycling to achieve resilient year-round yields.
+            </p>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="article-card reveal-fade-up" style="transition-delay: 0.15s;">
+          <div class="article-card-thumb">
+            <img src="assets/images/modern-greenhouse.jpg" alt="Scientist in modern solar vertical farming greenhouse">
+          </div>
+          <div class="article-card-body">
+            <h3 class="article-title">Sustainable Farming in the Modern Era</h3>
+            <p class="article-desc">
+              Embracing controlled environment vertical agriculture, solar-powered drip misting, and zero-runoff closed loop farming technologies.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 6: FAQ ACCORDION (SLIDING TRANSITION)
+       ========================================================================= -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="faq-grid">
+        <div class="faq-header-left reveal-fade-up">
+          <h2 class="faq-title font-display">
+            Got Questions?<br>We've Got You<br>Covered.
+          </h2>
+          <p class="faq-subtitle">
+            Find quick answers to some of the most common questions about KISSANVISION solutions, farming technology, and how we help farmers grow smarter and sustainably.
+          </p>
+        </div>
+
+        <div class="faq-accordion-list reveal-fade-up" style="transition-delay: 0.15s;">
+          <!-- Item 1 (Active by default) -->
+          <div class="faq-item active">
+            <button type="button" class="faq-trigger">
+              <span>What kind of farming solutions do you offer?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-content">
+              <p>
+                We provide tools and technology for precision farming, crop monitoring, ML yield simulation with ICAR risk alerts, and smart irrigation to help farmers optimize yield and resource efficiency.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger">
+              <span>How can I start using KISSANVISION's platform?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-content">
+              <p>
+                Simply navigate to our AI Predictor simulator above or connect directly to our 15 REST API endpoints. You can select your state, crop, and farm area to get instant localized agronomic forecasts.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger">
+              <span>Are your technologies eco-friendly?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-content">
+              <p>
+                Yes, 100%. Our intelligence models are designed around regenerative agriculture, helping minimize synthetic chemical runoff, preventing over-irrigation, and protecting groundwater aquifers.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger">
+              <span>Do you provide support and training?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-content">
+              <p>
+                We offer extensive documentation, API guides, interactive SHAP explainability breakdowns, and dedicated agronomy advisory to guide farmers and agricultural researchers through every season.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            KISSANVISION <span>·</span>
+          </div>
+          <p>
+            Empowering modern agriculture with cutting-edge artificial intelligence, real-time climate data, and sustainable practices.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#predictor">AI Predictor</a></li>
+            <li><a href="#innovations">About Us</a></li>
+            <li><a href="#technology">Technology</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="/docs" target="_blank">API Swagger Docs</a></li>
+            <li><a href="#articles">Research Articles</a></li>
+            <li><a href="#faq">Frequently Asked Questions</a></li>
+            <li><a href="http://localhost:8501" target="_blank">Streamlit Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Stay Connected</h4>
+          <p style="font-size: 0.9rem;">Receive season forecasts and yield advisories directly in your inbox.</p>
+          <form class="newsletter-input-box" onsubmit="event.preventDefault(); alert('Subscribed to KISSANVISION updates!');">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Join</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 KISSANVISION. All rights reserved. Built with ❤️ for Indian Agriculture.</div>
+        <div id="systemStatus" class="system-status-indicator">
+          <span class="pulse"></span> AI Engine Online · v3.2.0
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
